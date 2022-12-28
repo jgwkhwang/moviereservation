@@ -28,7 +28,7 @@
 - 영화 예약(reservation)
 - 결재(payment)
 - 영화 일정(schedule)
-- 영화 후기
+- 영화 후기(review)
 - 현황판(Dashboard)
 
 
