@@ -16,6 +16,8 @@ public class ReservationCancelled extends AbstractEvent {
     private Long paymentId;
     private String status;
     private Date updateDate;
+    private Date createDate;
+    private String reservId;
 
     public ReservationCancelled(Reservation aggregate){
         super(aggregate);

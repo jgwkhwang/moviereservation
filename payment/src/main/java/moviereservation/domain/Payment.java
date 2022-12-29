@@ -30,7 +30,11 @@ public class Payment  {
     
     
     
+<<<<<<< HEAD
     private Long scheduleId;
+=======
+    private String scheduleId;
+>>>>>>> origin/template
     
     
     

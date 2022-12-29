@@ -67,7 +67,7 @@
             headers: 
                 [
                     { text: "paymentId", value: "paymentId" },
-                    { text: "movieId", value: "movieId" },
+                    { text: "scheduleId", value: "scheduleId" },
                     { text: "approveDate", value: "approveDate" },
                     { text: "amount", value: "amount" },
                     { text: "status", value: "status" },
@@ -91,7 +91,7 @@
 
             this.newValue = {
                 'paymentId': '',
-                'movieId': '',
+                'scheduleId': '',
                 'approveDate': '',
                 'amount': 0,
                 'status': '',

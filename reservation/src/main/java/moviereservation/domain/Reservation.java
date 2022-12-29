@@ -108,6 +108,9 @@ public class Reservation  {
         cancelConfirmed.publishAfterCommit();
 
     }
+    @PreRemove
+    public void onPreRemove(){
+    }
 
     public static ReservationRepository repository(){
         ReservationRepository reservationRepository = ReservationApplication.applicationContext.getBean(ReservationRepository.class);
@@ -123,6 +126,8 @@ public class Reservation  {
         Reservation reservation = new Reservation();
         repository().save(reservation);
 
+        ReservationConfirmed reservationConfirmed = new ReservationConfirmed(reservation);
+        reservationConfirmed.publishAfterCommit();
         */
 
         /** Example 2:  finding and process
@@ -132,6 +137,8 @@ public class Reservation  {
             reservation // do something
             repository().save(reservation);
 
+            ReservationConfirmed reservationConfirmed = new ReservationConfirmed(reservation);
+            reservationConfirmed.publishAfterCommit();
 
          });
         */
@@ -144,6 +151,8 @@ public class Reservation  {
         Reservation reservation = new Reservation();
         repository().save(reservation);
 
+        CancelConfirmed cancelConfirmed = new CancelConfirmed(reservation);
+        cancelConfirmed.publishAfterCommit();
         */
 
         /** Example 2:  finding and process
@@ -153,6 +162,8 @@ public class Reservation  {
             reservation // do something
             repository().save(reservation);
 
+            CancelConfirmed cancelConfirmed = new CancelConfirmed(reservation);
+            cancelConfirmed.publishAfterCommit();
 
          });
         */

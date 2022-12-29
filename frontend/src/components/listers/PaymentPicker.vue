@@ -18,7 +18,7 @@
                                 PaymentId :  {{item.paymentId }}
                             </v-list-item-subtitle>
                             <v-list-item-subtitle>
-                                MovieId :  {{item.movieId }}
+                                ScheduleId :  {{item.scheduleId }}
                             </v-list-item-subtitle>
                             <v-list-item-subtitle>
                                 ApproveDate :  {{item.approveDate }}

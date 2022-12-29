@@ -18,7 +18,7 @@
 
         <v-card-text>
             <String label="PaymentId" v-model="value.paymentId" :editMode="editMode"/>
-            <String label="MovieId" v-model="value.movieId" :editMode="editMode"/>
+            <String label="ScheduleId" v-model="value.scheduleId" :editMode="editMode"/>
             <String label="ApproveDate" v-model="value.approveDate" :editMode="editMode"/>
             <Number label="Amount" v-model="value.amount" :editMode="editMode"/>
             <String label="Status" v-model="value.status" :editMode="editMode"/>

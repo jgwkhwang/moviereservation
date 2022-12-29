@@ -9,7 +9,7 @@
                 <String label="PaymentId" v-model="item.paymentId" :editMode="editMode" @change="change" />
             </div>
             <div>
-                <String label="MovieId" v-model="item.movieId" :editMode="editMode" @change="change" />
+                <String label="ScheduleId" v-model="item.scheduleId" :editMode="editMode" @change="change" />
             </div>
             <div>
                 <String label="ApproveDate" v-model="item.approveDate" :editMode="editMode" @change="change" />

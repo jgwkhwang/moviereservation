@@ -20,7 +20,7 @@
 
                         <v-list-item-subtitle style="font-size:25px; font-weight:700;">
                             [ PaymentId :  {{data.paymentId }} ] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            [ MovieId :  {{data.movieId }} ] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            [ ScheduleId :  {{data.scheduleId }} ] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             [ ApproveDate :  {{data.approveDate }} ] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             [ Amount :  {{data.amount }} ] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             [ Status :  {{data.status }} ] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -108,7 +108,7 @@
             
             this.newValue = {
                 'paymentId': '',
-                'movieId': '',
+                'scheduleId': '',
                 'approveDate': '',
                 'amount': 0,
                 'status': '',
