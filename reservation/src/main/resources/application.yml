@@ -77,4 +77,14 @@ api:
   url:
     payment: localhost:8080
 
+# 5. CircuitBreaker
+feign:
+  hystrix:
+    enabled: true
+
+hystrix:
+  command:
+    # 전역설정
+    default:
+      execution.isolation.thread.timeoutInMilliseconds: 610
 
