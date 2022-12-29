@@ -24,13 +24,13 @@ public class Payment  {
     
     
     
-    private String paymentId;
+    private Long paymentId;
     
     
     
     
     
-    private String movieId;
+    private String scheduleId;
     
     
     
@@ -83,26 +83,14 @@ public class Payment  {
 
 
 
-
     public static void cancelPayment(ReservationCancelled reservationCancelled){
 
-        /** Example 1:  new item 
-        Payment payment = new Payment();
-        repository().save(payment);
-
-        */
-
-        /** Example 2:  finding and process
-        
-        repository().findById(reservationCancelled.get???()).ifPresent(payment->{
-            
-            payment // do something
+        // 1. ReservationCanclled event에서 넘어온 paymentId(Payment의 PK)로 Payment 레코드 검색
+        repository().findById(reservationCancelled.getPaymentId()).ifPresent(payment->{
+            // 2. 1에서 검색된 Payment 레코드의 상태를 Cancelled로 변경
+            payment.setStatus("Cancelled");
             repository().save(payment);
-
-
          });
-        */
-
         
     }
 
