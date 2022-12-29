@@ -90,19 +90,17 @@ public class Payment  {
         Payment payment = new Payment();
         repository().save(payment);
 
-        
 
-        /** Example 2:  finding and process
+
+        /** Example 2:  finding and process **/
         
         repository().findById(reservationCancelled.get???()).ifPresent(payment->{
             
-            payment // do something
+            //payment // do something
             repository().save(payment);
 
 
          });
-        */
-
         
     }
 
