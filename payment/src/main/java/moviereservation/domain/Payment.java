@@ -30,7 +30,7 @@ public class Payment  {
     
     
     
-    private Long scheduleId;
+    private String scheduleId;
    
     
     
