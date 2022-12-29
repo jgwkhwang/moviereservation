@@ -24,14 +24,9 @@ public class Payment  {
     
     
     
-    private Long paymentId;
+    private Long id;
     
     
-    
-    
-    
-    private String scheduleId;
-   
     
     
     

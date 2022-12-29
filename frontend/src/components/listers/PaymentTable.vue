@@ -66,8 +66,7 @@
             values: [],
             headers: 
                 [
-                    { text: "paymentId", value: "paymentId" },
-                    { text: "scheduleId", value: "scheduleId" },
+                    { text: "id", value: "id" },
                     { text: "approveDate", value: "approveDate" },
                     { text: "amount", value: "amount" },
                     { text: "status", value: "status" },
@@ -90,8 +89,6 @@
             this.values = temp.data._embedded.payments;
 
             this.newValue = {
-                'paymentId': '',
-                'scheduleId': '',
                 'approveDate': '',
                 'amount': 0,
                 'status': '',

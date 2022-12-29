@@ -10,8 +10,7 @@
                     <v-list-item-content>
                         <v-list-item-title style="margin-bottom:10px;">
                             
-                            
-                            
+                             ApproveDate 
                             
                             
                             
@@ -19,8 +18,7 @@
                         </v-list-item-title>
 
                         <v-list-item-subtitle style="font-size:25px; font-weight:700;">
-                            [ PaymentId :  {{data.paymentId }} ] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            [ ScheduleId :  {{data.scheduleId }} ] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            [ Id :  {{data.id }} ] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             [ ApproveDate :  {{data.approveDate }} ] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             [ Amount :  {{data.amount }} ] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             [ Status :  {{data.status }} ] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -107,8 +105,6 @@
             this.values = temp.data._embedded.payments;
             
             this.newValue = {
-                'paymentId': '',
-                'scheduleId': '',
                 'approveDate': '',
                 'amount': 0,
                 'status': '',

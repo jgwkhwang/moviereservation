@@ -6,12 +6,6 @@
 
         <v-card-text>
             <div>
-                <String label="PaymentId" v-model="item.paymentId" :editMode="editMode" @change="change" />
-            </div>
-            <div>
-                <String label="ScheduleId" v-model="item.scheduleId" :editMode="editMode" @change="change" />
-            </div>
-            <div>
                 <String label="ApproveDate" v-model="item.approveDate" :editMode="editMode" @change="change" />
             </div>
             <div>

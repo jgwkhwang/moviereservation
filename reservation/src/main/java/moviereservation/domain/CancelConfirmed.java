@@ -13,11 +13,11 @@ public class CancelConfirmed extends AbstractEvent {
     private Long id;
     private String userId;
     private String scheduleId;
-    private String paymentId;
+    private Long paymentId;
     private String status;
-    private String reservId;
     private String createDate;
     private String updateDate;
+    private String reservId;
 
     public CancelConfirmed(Reservation aggregate){
         super(aggregate);

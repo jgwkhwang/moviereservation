@@ -68,8 +68,6 @@
             me.values = temp.data._embedded.payments;
             
             me.newValue = {
-                'paymentId': '',
-                'scheduleId': '',
                 'approveDate': '',
                 'amount': 0,
                 'status': '',
