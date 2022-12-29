@@ -18,10 +18,10 @@
                 <Number label="SeatCnt" v-model="item.seatCnt" :editMode="editMode" @change="change" />
             </div>
             <div>
-                <Date label="StartDate" v-model="item.startDate" :editMode="editMode" @change="change" />
+                <String label="StartDate" v-model="item.startDate" :editMode="editMode" @change="change" />
             </div>
             <div>
-                <Date label="EndDate" v-model="item.endDate" :editMode="editMode" @change="change" />
+                <String label="EndDate" v-model="item.endDate" :editMode="editMode" @change="change" />
             </div>
             <div>
                 <Number label="SaleCnt" v-model="item.saleCnt" :editMode="editMode" @change="change" />

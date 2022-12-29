@@ -52,13 +52,13 @@ public class Schedule  {
     
     
     
-    private Date startDate;
+    private String startDate;
     
     
     
     
     
-    private Date endDate;
+    private String endDate;
     
     
     

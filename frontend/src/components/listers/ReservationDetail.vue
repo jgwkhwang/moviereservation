@@ -18,10 +18,10 @@
                 <String label="Status" v-model="item.status" :editMode="editMode" @change="change" />
             </div>
             <div>
-                <Date label="CreateDate" v-model="item.createDate" :editMode="editMode" @change="change" />
+                <String label="CreateDate" v-model="item.createDate" :editMode="editMode" @change="change" />
             </div>
             <div>
-                <Date label="UpdateDate" v-model="item.updateDate" :editMode="editMode" @change="change" />
+                <String label="UpdateDate" v-model="item.updateDate" :editMode="editMode" @change="change" />
             </div>
             <div>
                 <String label="ReservId" v-model="item.reservId" :editMode="editMode" @change="change" />

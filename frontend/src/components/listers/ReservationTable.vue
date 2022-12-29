@@ -95,8 +95,8 @@
                 'scheduleId': '',
                 'paymentId': '',
                 'status': '',
-                'createDate': '2022-12-29',
-                'updateDate': '2022-12-29',
+                'createDate': '',
+                'updateDate': '',
                 'reservId': '',
             }
         },

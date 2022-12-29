@@ -21,8 +21,8 @@
             <String label="Title" v-model="value.title" :editMode="editMode"/>
             <Number label="Price" v-model="value.price" :editMode="editMode"/>
             <Number label="SeatCnt" v-model="value.seatCnt" :editMode="editMode"/>
-            <Date label="StartDate" v-model="value.startDate" :editMode="editMode"/>
-            <Date label="EndDate" v-model="value.endDate" :editMode="editMode"/>
+            <String label="StartDate" v-model="value.startDate" :editMode="editMode"/>
+            <String label="EndDate" v-model="value.endDate" :editMode="editMode"/>
             <Number label="SaleCnt" v-model="value.saleCnt" :editMode="editMode"/>
             <String label="Theather" v-model="value.theather" :editMode="editMode"/>
             <String label="ScheduleId" v-model="value.scheduleId" :editMode="editMode"/>
