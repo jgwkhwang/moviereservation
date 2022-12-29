@@ -86,11 +86,9 @@ public class Payment  {
 
     public static void cancelPayment(ReservationCancelled reservationCancelled){
 
-        /** Example 1:  new item 
+        // Example 1:  new item 
         Payment payment = new Payment();
         repository().save(payment);
-
-        */
 
         /** Example 2:  finding and process
         
