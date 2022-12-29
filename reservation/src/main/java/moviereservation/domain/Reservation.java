@@ -44,7 +44,7 @@ public class Reservation  {
     
     
     
-    private String paymentId;
+    private Long paymentId;
     
     
     

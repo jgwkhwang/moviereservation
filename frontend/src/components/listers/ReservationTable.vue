@@ -93,7 +93,7 @@
             this.newValue = {
                 'userId': '',
                 'scheduleId': '',
-                'paymentId': '',
+                'paymentId': 0,
                 'status': '',
                 'createDate': '',
                 'updateDate': '',

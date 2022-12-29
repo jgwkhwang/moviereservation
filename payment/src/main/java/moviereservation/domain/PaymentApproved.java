@@ -11,8 +11,6 @@ import lombok.*;
 public class PaymentApproved extends AbstractEvent {
 
     private Long id;
-    private String paymentId;
-    private String scheduleId;
     private String approveDate;
     private Integer amount;
     private String status;
