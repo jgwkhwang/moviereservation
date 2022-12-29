@@ -8,6 +8,26 @@ spring:
   cloud:
     gateway:
       routes:
+        - id: reservation
+          uri: http://localhost:8081
+          predicates:
+            - Path=/reservations/**, 
+        - id: payment
+          uri: http://localhost:8082
+          predicates:
+            - Path=/payments/**, 
+        - id: review
+          uri: http://localhost:8083
+          predicates:
+            - Path=/reviews/**, 
+        - id: dashboard
+          uri: http://localhost:8084
+          predicates:
+            - Path=, /dashboards/**
+        - id: schedule
+          uri: http://localhost:8085
+          predicates:
+            - Path=/schedules/**, 
         - id: frontend
           uri: http://localhost:8080
           predicates:
@@ -31,6 +51,26 @@ spring:
   cloud:
     gateway:
       routes:
+        - id: reservation
+          uri: http://reservation:8080
+          predicates:
+            - Path=/reservations/**, 
+        - id: payment
+          uri: http://payment:8080
+          predicates:
+            - Path=/payments/**, 
+        - id: review
+          uri: http://review:8080
+          predicates:
+            - Path=/reviews/**, 
+        - id: dashboard
+          uri: http://dashboard:8080
+          predicates:
+            - Path=, /dashboards/**
+        - id: schedule
+          uri: http://schedule:8080
+          predicates:
+            - Path=/schedules/**, 
         - id: frontend
           uri: http://frontend:8080
           predicates:

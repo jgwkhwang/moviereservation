@@ -22,20 +22,18 @@ public class PolicyHandler{
     @StreamListener(KafkaProcessor.INPUT)
     public void whatever(@Payload String eventString){}
 
+    // 1. Saga
     @StreamListener(value=KafkaProcessor.INPUT, condition="headers['type']=='ReservationCancelled'")
     public void wheneverReservationCancelled_CancelPayment(@Payload ReservationCancelled reservationCancelled){
 
         System.out.println("\n\n##### listener CancelPayment : " + reservationCancelled + "\n\n");
         try {
             if(!reservationCancelled.validate()) return;
-            
+            // Saga-1. cancelPayment Policy 호출
             Payment.cancelPayment(reservationCancelled);
         }catch(Exception e){
             e.printStackTrace();
         }
-        
-
-        
 
     }
 

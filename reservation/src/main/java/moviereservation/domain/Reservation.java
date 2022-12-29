@@ -70,6 +70,12 @@ public class Reservation  {
     
     private String reservId;
 
+    // 5. CircuitBreaker
+    @PrePersist
+    public void onPrePersist(){
+        
+    }
+
     @PostPersist
     public void onPostPersist(){
 

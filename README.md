@@ -515,6 +515,89 @@ http localhost:8080/orders     # 모든 주문의 상태가 "배송됨"으로 �
 
 # 운영
 
+## API gateway
+
+1. application.yml 파일 내에 profiles 별 routes를 추가.
+   gateway 서버의 포트는 8080.
+
+# application.yml
+```
+spring:
+  profiles: docker
+  cloud:
+    gateway:
+      routes:
+        - id: reservation
+          uri: http://reservation:8080
+          predicates:
+            - Path=/reservations/**, 
+        - id: payment
+          uri: http://payment:8080
+          predicates:
+            - Path=/payments/**, 
+        - id: review
+          uri: http://review:8080
+          predicates:
+            - Path=/reviews/**, 
+        - id: dashboard
+          uri: http://dashboard:8080
+          predicates:
+            - Path=, /dashboards/**
+        - id: schedule
+          uri: http://schedule:8080
+          predicates:
+            - Path=/schedules/**, 
+        - id: frontend
+          uri: http://frontend:8080
+          predicates:
+            - Path=/**
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins:
+              - "*"
+            allowedMethods:
+              - "*"
+            allowedHeaders:
+              - "*"
+            allowCredentials: true
+
+server:
+  port: 8080
+
+```   
+
+2. Kubernetes에 Deploy 생성.
+
+# deployment.yml 내용
+``` 
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gateway
+  labels:
+    app: gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gateway
+  template:
+    metadata:
+      labels:
+        app: gateway
+    spec:
+      containers:
+        - name: gateway
+          image: username/gateway:latest
+          ports:
+            - containerPort: 8080
+```             
+# Kubernetes에 생성된 Deploy 확인
+![image](https://user-images.githubusercontent.com/117131347/209910844-100d2aa6-a108-4a91-a12a-0f08a9bf12a2.png)
+
+
+
 ## CI/CD 설정
 
 

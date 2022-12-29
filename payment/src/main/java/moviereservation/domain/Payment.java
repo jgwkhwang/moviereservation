@@ -30,7 +30,7 @@ public class Payment  {
     
     
     
-    private String scheduleId;
+    private Long scheduleId;
     
     
     
@@ -81,13 +81,11 @@ public class Payment  {
         return paymentRepository;
     }
 
-
-
     public static void cancelPayment(ReservationCancelled reservationCancelled){
 
-        // 1. ReservationCanclled event에서 넘어온 paymentId(Payment의 PK)로 Payment 레코드 검색
+        //Saga-2. ReservationCanclled event에서 넘어온 paymentId(Payment의 PK)로 Payment 레코드 검색
         repository().findById(reservationCancelled.getPaymentId()).ifPresent(payment->{
-            // 2. 1에서 검색된 Payment 레코드의 상태를 Cancelled로 변경
+            //Saga-3. Saga-3에서 검색된 Payment 레코드의 상태를 Cancelled로 변경
             payment.setStatus("Cancelled");
             repository().save(payment);
          });
