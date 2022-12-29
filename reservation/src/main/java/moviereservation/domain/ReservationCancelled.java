@@ -11,12 +11,12 @@ import lombok.*;
 public class ReservationCancelled extends AbstractEvent {
 
     private Long id;
-    private Long userId;
-    private Long scheduleId;
-    private Long paymentId;
+    private String userId;
+    private String scheduleId;
+    private String paymentId;
     private String status;
-    private Date updateDate;
     private Date createDate;
+    private Date updateDate;
     private String reservId;
 
     public ReservationCancelled(Reservation aggregate){
