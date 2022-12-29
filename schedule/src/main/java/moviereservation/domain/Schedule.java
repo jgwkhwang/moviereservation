@@ -1,9 +1,5 @@
 package moviereservation.domain;
 
-import moviereservation.domain.ScheduleRegisted;
-import moviereservation.domain.ScheduleUpdate;
-import moviereservation.domain.ScheduleDeleted;
-import moviereservation.domain.UpdateSaleCnt;
 import moviereservation.ScheduleApplication;
 import javax.persistence.*;
 import java.util.List;
@@ -84,29 +80,9 @@ public class Schedule  {
 
     @PostPersist
     public void onPostPersist(){
-
-
-        ScheduleRegisted scheduleRegisted = new ScheduleRegisted(this);
-        scheduleRegisted.publishAfterCommit();
-
-
-
-        ScheduleUpdate scheduleUpdate = new ScheduleUpdate(this);
-        scheduleUpdate.publishAfterCommit();
-
-
-
-        ScheduleDeleted scheduleDeleted = new ScheduleDeleted(this);
-        scheduleDeleted.publishAfterCommit();
-
     }
-    @PostUpdate
-    public void onPostUpdate(){
-
-
-        UpdateSaleCnt updateSaleCnt = new UpdateSaleCnt(this);
-        updateSaleCnt.publishAfterCommit();
-
+    @PreRemove
+    public void onPreRemove(){
     }
 
     public static ScheduleRepository repository(){

@@ -69,7 +69,7 @@
             
             me.newValue = {
                 'paymentId': '',
-                'movieId': '',
+                'scheduleId': '',
                 'approveDate': '',
                 'amount': 0,
                 'status': '',

@@ -6,7 +6,7 @@ import java.util.Date;
 public class Payment {
 
     private String paymentId;
-    private String movieId;
+    private String scheduleId;
     private String approveDate;
     private Integer amount;
     private String status;

@@ -30,7 +30,7 @@ public class Payment  {
     
     
     
-    private String movieId;
+    private String scheduleId;
     
     
     
@@ -90,6 +90,8 @@ public class Payment  {
         Payment payment = new Payment();
         repository().save(payment);
 
+        PaymentCancelled paymentCancelled = new PaymentCancelled(payment);
+        paymentCancelled.publishAfterCommit();
         */
 
         /** Example 2:  finding and process
@@ -99,6 +101,8 @@ public class Payment  {
             payment // do something
             repository().save(payment);
 
+            PaymentCancelled paymentCancelled = new PaymentCancelled(payment);
+            paymentCancelled.publishAfterCommit();
 
          });
         */
