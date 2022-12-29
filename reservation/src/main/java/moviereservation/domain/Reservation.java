@@ -56,13 +56,13 @@ public class Reservation  {
     
     
     
-    private Date createDate;
+    private String createDate;
     
     
     
     
     
-    private Date updateDate;
+    private String updateDate;
     
     
     

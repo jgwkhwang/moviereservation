@@ -21,8 +21,8 @@
             <String label="ScheduleId" v-model="value.scheduleId" :editMode="editMode"/>
             <String label="PaymentId" v-model="value.paymentId" :editMode="editMode"/>
             <String label="Status" v-model="value.status" :editMode="editMode"/>
-            <Date label="CreateDate" v-model="value.createDate" :editMode="editMode"/>
-            <Date label="UpdateDate" v-model="value.updateDate" :editMode="editMode"/>
+            <String label="CreateDate" v-model="value.createDate" :editMode="editMode"/>
+            <String label="UpdateDate" v-model="value.updateDate" :editMode="editMode"/>
             <String label="ReservId" v-model="value.reservId" :editMode="editMode"/>
         </v-card-text>
 

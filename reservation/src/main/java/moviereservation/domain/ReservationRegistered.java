@@ -15,9 +15,9 @@ public class ReservationRegistered extends AbstractEvent {
     private String scheduleId;
     private String paymentId;
     private String status;
-    private Date createDate;
-    private Date updateDate;
     private String reservId;
+    private String createDate;
+    private String updateDate;
 
     public ReservationRegistered(Reservation aggregate){
         super(aggregate);
