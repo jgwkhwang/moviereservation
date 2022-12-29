@@ -6,13 +6,13 @@
 
         <v-card-text>
             <div>
-                <Number label="UserId" v-model="item.userId" :editMode="editMode" @change="change" />
+                <String label="UserId" v-model="item.userId" :editMode="editMode" @change="change" />
             </div>
             <div>
-                <Number label="ScheduleId" v-model="item.scheduleId" :editMode="editMode" @change="change" />
+                <String label="ScheduleId" v-model="item.scheduleId" :editMode="editMode" @change="change" />
             </div>
             <div>
-                <Number label="PaymentId" v-model="item.paymentId" :editMode="editMode" @change="change" />
+                <String label="PaymentId" v-model="item.paymentId" :editMode="editMode" @change="change" />
             </div>
             <div>
                 <String label="Status" v-model="item.status" :editMode="editMode" @change="change" />

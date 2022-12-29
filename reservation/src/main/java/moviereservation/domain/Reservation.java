@@ -1,9 +1,9 @@
 package moviereservation.domain;
 
 import moviereservation.domain.ReservationRegistered;
-import moviereservation.domain.ReservationCancelled;
 import moviereservation.domain.ReservationConfirmed;
 import moviereservation.domain.CancelConfirmed;
+import moviereservation.domain.ReservationCancelled;
 import moviereservation.ReservationApplication;
 import javax.persistence.*;
 import java.util.List;
@@ -32,19 +32,19 @@ public class Reservation  {
     
     
     
-    private Long userId;
+    private String userId;
     
     
     
     
     
-    private Long scheduleId;
+    private String scheduleId;
     
     
     
     
     
-    private Long paymentId;
+    private String paymentId;
     
     
     
@@ -100,11 +100,6 @@ public class Reservation  {
 
 
 
-        ReservationCancelled reservationCancelled = new ReservationCancelled(this);
-        reservationCancelled.publishAfterCommit();
-
-
-
         ReservationConfirmed reservationConfirmed = new ReservationConfirmed(this);
         reservationConfirmed.publishAfterCommit();
 
@@ -116,6 +111,11 @@ public class Reservation  {
     }
     @PreRemove
     public void onPreRemove(){
+
+
+        ReservationCancelled reservationCancelled = new ReservationCancelled(this);
+        reservationCancelled.publishAfterCommit();
+
     }
 
     public static ReservationRepository repository(){
