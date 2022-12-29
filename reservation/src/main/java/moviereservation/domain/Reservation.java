@@ -8,6 +8,8 @@ import moviereservation.ReservationApplication;
 import javax.persistence.*;
 import java.util.List;
 import lombok.Data;
+
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
@@ -87,9 +89,20 @@ public class Reservation  {
 
         //Following code causes dependency to external APIs
         // it is NOT A GOOD PRACTICE. instead, Event-Policy mapping is recommended.
-
+        Date nowDate = new Date();	        
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddhh24miss"); 
+		String strNowDate = simpleDateFormat.format(nowDate); 
+        SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat("yyyy년MM월dd일hh24시mi분ss초"); 
+        String strNowDate2 = simpleDateFormat2.format(nowDate); 
 
         moviereservation.external.Payment payment = new moviereservation.external.Payment();
+        payment.setPaymentId(strNowDate);
+        payment.setReservId(getReservId());
+        payment.setStatus("created");
+        payment.setApproveDate(strNowDate2);
+        payment.setAmount(12000);
+        payment.setQty("1");
+
         // mappings goes here
         ReservationApplication.applicationContext.getBean(moviereservation.external.PaymentService.class)
             .approvePayment(payment);

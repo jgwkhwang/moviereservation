@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: review
-          image: username/review:latest
+          image: hyunjunghh/review:1.0
           ports:
             - containerPort: 8080
           readinessProbe:

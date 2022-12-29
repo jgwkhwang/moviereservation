@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: schedule
-          image: username/schedule:latest
+          image: hyunjung/schedule:1.0
           ports:
             - containerPort: 8080
           readinessProbe:
