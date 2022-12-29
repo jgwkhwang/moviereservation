@@ -75,6 +75,17 @@ public class Payment  {
 
     }
 
+
+    // cc test
+    @PostLoad
+    public void makeDelay(){
+        try {
+            Thread.currentThread().sleep((long) (400 + Math.random() * 220));
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+     }
+
     public static PaymentRepository repository(){
         PaymentRepository paymentRepository = PaymentApplication.applicationContext.getBean(PaymentRepository.class);
         return paymentRepository;

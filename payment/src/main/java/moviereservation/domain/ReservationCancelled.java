@@ -16,6 +16,7 @@ public class ReservationCancelled extends AbstractEvent {
     private Date updateDate;
     private Date createDate;
     private String reservId;
+    
 }
 
 

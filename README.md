@@ -521,7 +521,7 @@ http localhost:8080/orders     # 모든 주문의 상태가 "배송됨"으로 �
 1. application.yml 파일 내에 profiles 별 routes를 추가.
    gateway 서버의 포트는 8080.
 
-# application.yml
+- application.yml
 ```
 spring:
   profiles: docker
@@ -570,7 +570,7 @@ server:
 
 2. Kubernetes에 Deploy 생성.
 
-# deployment.yml 내용
+- deployment.yml
 ``` 
 apiVersion: apps/v1
 kind: Deployment
@@ -594,10 +594,29 @@ spec:
           ports:
             - containerPort: 8080
 ```             
-# Kubernetes에 생성된 Deploy 확인
+- Kubernetes에 생성된 Deploy 확인
 ![image](https://user-images.githubusercontent.com/117131347/209910844-100d2aa6-a108-4a91-a12a-0f08a9bf12a2.png)
 
+3. Service 
+  Kubernestes용 service.yaml 작성한 후 gateway 엔드포인트 확인.
+- service.yaml 
+```
+apiVersion: v1
+kind: Service
+metadata:
+  name: gateway
+  labels:
+    app: gateway
+spec:
+  ports:
+    - port: 8080
+      targetPort: 8080
+  selector:
+    app: gateway
+  type: LoadBalancer
 
+```
+ ![image](https://user-images.githubusercontent.com/117131347/209915789-8005b700-cb18-45a2-afc5-0765afb42052.png) 
 
 ## CI/CD 설정
 

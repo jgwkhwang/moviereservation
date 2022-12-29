@@ -73,7 +73,13 @@ public class Reservation  {
     // 5. CircuitBreaker
     @PrePersist
     public void onPrePersist(){
-        
+
+        // command 
+        ReservationRegistered reservationRegistered = new ReservationRegistered(this);
+        reservationRegistered.publishAfterCommit();
+
+        ReservationCancelled reservationCancelled = new ReservationCancelled(this);
+        reservationCancelled.publishAfterCommit();
     }
 
     @PostPersist
