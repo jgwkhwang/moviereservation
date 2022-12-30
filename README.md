@@ -232,7 +232,7 @@ python policy-handler.py
 ```
 
 ## Saga
-- 고객(customer)에 의해 reservation에서 예약이 취소되어 ReservationCancelled 이벤트가 발생할 경우, Kafka를 통해 pub-sub 방식으로 payment에서 cancelPayment가 작동된다.
+- 고객(customer)에 의해 reservation에서 예약이 취소되어 ReservationCancelled 이벤트가 발생할 경우, Kafka MQ를 통해 pub-sub 방식으로 payment에서 cancelPayment가 작동된다.
 
 ```
 #payment/src/main/java/moviereservation/infra/PolicyHandler.java
