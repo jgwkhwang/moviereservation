@@ -271,7 +271,7 @@ public class PolicyHandler{
     public static void cancelPayment(ReservationCancelled reservationCancelled){
 
         //Saga-2. ReservationCanclled event에서 넘어온 paymentId(Payment의 PK)로 Payment 레코드 검색
-        repository().findById(reservationCancelled.getId()).ifPresent(payment->{
+        repository().findById(reservationCancelled.getPaymentId()).ifPresent(payment->{
             //Saga-3. Saga-3에서 검색된 Payment 레코드의 상태를 Cancelled로 변경
             payment.setStatus("Cancelled");
             repository().save(payment);
