@@ -211,6 +211,11 @@ public class PolicyHandler{
 ...
 ```
 
+![image](https://user-images.githubusercontent.com/117132766/210037385-316b7b68-17f1-4205-a00c-926dd8c63406.png)
+
+![image](https://user-images.githubusercontent.com/117132766/210037914-3d864687-9f9b-4ec4-aa90-f00ef6c2c4c3.png)
+
+
 ## CQRS
 - dashboard ReadModel의 데이터 입력/수정/삭제와 조회를 분리한다.
 - 예시로 reservation의 ReservationRegistered 이벤트 발생 시 reservation.id, status를 dashboard.reservId, reservStatus에 반영한다.
