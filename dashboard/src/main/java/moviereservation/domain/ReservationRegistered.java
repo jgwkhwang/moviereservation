@@ -9,7 +9,7 @@ import java.util.*;
 public class ReservationRegistered extends AbstractEvent {
 
     private Long id;
-    private Long userId;
+    private String userId;
     private Long scheduleId;
     private Long paymentId;
     private String status;

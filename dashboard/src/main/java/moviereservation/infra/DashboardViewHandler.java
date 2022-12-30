@@ -22,7 +22,7 @@ public class DashboardViewHandler {
     public void whenReservationRegistered_then_CREATE_1 (@Payload ReservationRegistered reservationRegistered) {
         // CQRS-1. ReservationRegistered 이벤트 발생 시
         try {
-
+            System.out.println("dashboard view handler try block");
             if (!reservationRegistered.validate()) return;
             // CQRS-1. ReservationRegistered의 id, status를 dashboard에 저장
             Dashboard dashboard = new Dashboard();
