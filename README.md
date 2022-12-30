@@ -271,7 +271,7 @@ public class PolicyHandler{
     public static void cancelPayment(ReservationCancelled reservationCancelled){
 
         //Saga-2. ReservationCanclled event에서 넘어온 paymentId(Payment의 PK)로 Payment 레코드 검색
-        repository().findById(reservationCancelled.getId()).ifPresent(payment->{
+        repository().findById(reservationCancelled.getPaymentId()).ifPresent(payment->{
             //Saga-3. Saga-3에서 검색된 Payment 레코드의 상태를 Cancelled로 변경
             payment.setStatus("Cancelled");
             repository().save(payment);
@@ -279,6 +279,38 @@ public class PolicyHandler{
     }
 ...
 ```
+
+## CQRS
+- dashboard ReadModel의 데이터 입력/수정/삭제와 조회를 분리한다.
+- 예시로 reservation의 ReservationRegistered 이벤트 발생 시 reservation.id, status를 dashboard.reservId, reservStatus에 반영한다.
+
+```
+...
+  #dashboard/src/main/java/moviereservation/infra/DashboardViewHandler.java
+
+  // 2. CQRS
+    @StreamListener(KafkaProcessor.INPUT)
+    public void whenReservationRegistered_then_CREATE_1 (@Payload ReservationRegistered reservationRegistered) {
+        // CQRS-1. ReservationRegistered 이벤트 발생 시
+        try {
+            System.out.println("dashboard view handler try block");
+            if (!reservationRegistered.validate()) return;
+            // CQRS-1. ReservationRegistered의 id, status를 dashboard에 저장
+            Dashboard dashboard = new Dashboard();
+            dashboard.setReservId(Long.valueOf(reservationRegistered.getId()));
+            dashboard.setReservStatus(reservationRegistered.getStatus());
+            dashboardRepository.save(dashboard);
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+...
+```
+
+
+## Circuit Breaker
 
 ## DDD 의 적용
 
