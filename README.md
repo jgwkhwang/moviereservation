@@ -18,8 +18,8 @@
     - [Request Response](#Request-Response)
     - [Circuit Breaker](#Circuit-Breaker)
   - [운영](#운영)
-    - [Gateway Ingress](#Gateway-Ingress)
-    - [Deploy Pipeline](#Deploy-Pipeline)
+    - [Gateway](#Gateway)
+    - [Deploy](#Deploy)
     - [Autoscale](#Autoscale)
     - [Readiness Probe ](#Readiness-Probe )
     - [PV ConfigMap Secret ](#PV-ConfigMap-Secret)
@@ -360,75 +360,30 @@ public class PolicyHandler{
 
 # 운영
 
-## Gateway
-1. application.yml 파일 내에 profiles 별 routes를 추가.
-   gateway 서버의 포트는 8080.
+## Gateway Ingress
 
-- application.yml
-```
-spring:
-  profiles: docker
-  cloud:
-    gateway:
-      routes:
-        - id: reservation
-          uri: http://reservation:8080
-          predicates:
-            - Path=/reservations/**, 
-        - id: payment
-          uri: http://payment:8080
-          predicates:
-            - Path=/payments/**, 
-        - id: review
-          uri: http://review:8080
-          predicates:
-            - Path=/reviews/**, 
-        - id: dashboard
-          uri: http://dashboard:8080
-          predicates:
-            - Path=, /dashboards/**
-        - id: schedule
-          uri: http://schedule:8080
-          predicates:
-            - Path=/schedules/**, 
-        - id: frontend
-          uri: http://frontend:8080
-          predicates:
-            - Path=/**
-      globalcors:
-        corsConfigurations:
-          '[/**]':
-            allowedOrigins:
-              - "*"
-            allowedMethods:
-              - "*"
-            allowedHeaders:
-              - "*"
-            allowCredentials: true
+## Deploy Pipeline
 
-server:
-  port: 8080
+## Autoscale
+앞서 CB 는 시스템을 안정되게 운영할 수 있게 해줬지만 사용자의 요청을 100% 받아들여주지 못했기 때문에 이에 대한 보완책으로 자동화된 확장 기능을 적용하고자 한다.
 
-```   
-2. Service 
-  Kubernestes용 service.yaml 작성한 후 gateway 엔드포인트 확인.
-- service.yaml 
-```
-apiVersion: v1
-kind: Service
-metadata:
-  name: gateway
-  labels:
-    app: gateway
-spec:
-  ports:
-    - port: 8080
-      targetPort: 8080
-  selector:
-    app: gateway
-  type: LoadBalancer
+- Reservation deployment.yml 파일에 resources 설정을 추가한다.
+
+![image](https://user-images.githubusercontent.com/98464146/210037454-6ba83845-3b51-48a0-8d1a-e40d1c23662b.png)
+
+- 결제서비스에 대한 replica 를 동적으로 늘려주도록 HPA 를 설정한다. 설정은 CPU 사용량이 15프로를 넘어서면 replica 를 10개까지 늘려준다:
 
 ```
+kubectl autoscale deploy reservation --min=1 --max=10 --cpu-percent=15
+```
+
+- CB 에서 했던 방식대로 워크로드를 2분 동안 걸어준다.
+  동시 사용자 100명, 2분 동안 실시
+
+```
+siege -c100 -t120S --content-type "application/json" 'http://reservation:8080 POST {"status": "created"}'
+```
+
  ![image](https://user-images.githubusercontent.com/117131347/209915789-8005b700-cb18-45a2-afc5-0765afb42052.png) 
 
 ## Deploy
@@ -459,13 +414,74 @@ spec:
           ports:
             - containerPort: 8080
 ```             
+
 - Kubernetes에 생성된 Deploy 확인
+
 ![image](https://user-images.githubusercontent.com/117131347/210037419-5687b526-28e6-4029-a5cb-e2919e6d188b.png)
+=======
+
+- 오토스케일이 어떻게 되고 있는지 모니터링을 걸어둔다
 
 
-## Autoscale
+```
+kubectl get deploy reservation -w
+```
+
+- 어느정도 시간이 흐른 후 (약 30초) 스케일 아웃이 벌어지는 것을 확인할 수 있다.
+
+![image](https://user-images.githubusercontent.com/98464146/210038195-63191b70-fb23-4c6f-b00d-c6047d4f7ce9.png)
+
+- siege 의 로그를 보아도 전체적인 성공률이 높아진 것을 확인 할 수 있다.
+
+![image](https://user-images.githubusercontent.com/98464146/210038303-cc363234-0e48-4354-ab61-e8733fe5f248.png)
+
 
 ## Readiness Probe 
+
+- 먼저 무정지 재배포가 100% 되는 것인지 확인하기 위해서 Autoscaler 이나 CB 설정을 제거함!
+
+```
+kubectl delete destinationrules dr-payment
+kubectl delete hpa reservation
+```
+
+- seige 로 배포 작업 직전에 워크로드를 모니터링 함.
+  동시 사용자 100명, 2분 동안 실시
+
+```
+siege -c100 -t120S --content-type "application/json" 'http://reservation:8080 POST {"status": "created"}'
+```
+
+![image](https://user-images.githubusercontent.com/98464146/210039560-d353af64-6352-4ffd-a539-5a53a75fac9f.png)
+
+- 새버전으로의 배포 시작
+  Reservation deployment.yml 파일에 resources 설정을 추가 후 배포 한다.
+  
+```
+kubectl apply -f deployment.yml
+```
+
+- seige 의 화면으로 넘어가서 Availability 가 100% 미만으로 떨어졌는지 확인
+
+![image](https://user-images.githubusercontent.com/98464146/210039743-7931e579-09f7-425c-bef6-d5372b7e62a6.png)
+
+배포기간중 Availability 가 평소 100%에서 70% 대로 떨어지는 것을 확인. 
+원인은 쿠버네티스가 성급하게 새로 올려진 서비스를 READY 상태로 인식하여 서비스 유입을 진행한 것이기 때문. 이를 막기위해 Readiness Probe 를 설정함
+
+- reservation deployment.yml 파일 수정
+
+![image](https://user-images.githubusercontent.com/98464146/210039990-5574aa64-d77a-4edd-a9f3-5f126c42fd15.png)
+
+```
+kubectl apply -f deployment.yml
+```
+
+- 동일한 시나리오로 재배포 한 후 Availability 확인
+
+![image](https://user-images.githubusercontent.com/98464146/210040090-66648ae5-681c-44b2-9ee2-8c47faf0b807.png)
+
+배포기간 동안 Availability 가 변화없기 때문에 무정지 재배포가 성공한 것으로 확인됨
+
 
 ## PV ConfigMap Secre
 
