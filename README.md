@@ -18,8 +18,8 @@
     - [Request Response](#Request-Response)
     - [Circuit Breaker](#Circuit-Breaker)
   - [운영](#운영)
-    - [Gateway Ingress](#Gateway-Ingress)
-    - [Deploy Pipeline](#Deploy-Pipeline)
+    - [Gateway](#Gateway)
+    - [Deploy](#Deploy)
     - [Autoscale](#Autoscale)
     - [Readiness Probe ](#Readiness-Probe )
     - [PV ConfigMap Secret ](#PV-ConfigMap-Secret)
@@ -322,6 +322,42 @@ kubectl autoscale deploy reservation --min=1 --max=10 --cpu-percent=15
 ```
 siege -c100 -t120S --content-type "application/json" 'http://reservation:8080 POST {"status": "created"}'
 ```
+
+ ![image](https://user-images.githubusercontent.com/117131347/209915789-8005b700-cb18-45a2-afc5-0765afb42052.png) 
+
+## Deploy
+
+- Kubernetes에 Deploy 생성.
+
+- deployment.yml
+``` 
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gateway
+  labels:
+    app: gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gateway
+  template:
+    metadata:
+      labels:
+        app: gateway
+    spec:
+      containers:
+        - name: gateway
+          image: username/gateway:latest
+          ports:
+            - containerPort: 8080
+```             
+
+- Kubernetes에 생성된 Deploy 확인
+
+![image](https://user-images.githubusercontent.com/117131347/210037419-5687b526-28e6-4029-a5cb-e2919e6d188b.png)
+=======
 
 - 오토스케일이 어떻게 되고 있는지 모니터링을 걸어둔다
 
