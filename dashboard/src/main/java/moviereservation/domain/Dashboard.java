@@ -13,7 +13,7 @@ public class Dashboard {
 
         @Id
         //@GeneratedValue(strategy=GenerationType.AUTO)
-        private Long movieId;
+        private Long id;
         private String title;
         private Long reviewCnt;
         private Long seatCnt;

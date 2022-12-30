@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import moviereservation.config.kafka.KafkaProcessor;
 import moviereservation.domain.Dashboard;
-import moviereservation.domain.PaymentApproved;
 import moviereservation.domain.ReservationRegistered;
 import moviereservation.domain.ScheduleRegisted;
 
@@ -40,7 +39,7 @@ public class DashboardViewHandler {
     public void whenPaymentApproved_then_CREATE_1 (@Payload PaymentApproved paymentApproved) {
         try {
 
-            if (!paymentApproved.validate()) return;
+            if (!reservationRegistered.validate()) return;
 
             Dashboard dashboard = new Dashboard();
             dashboard.setPaymentId(Long.valueOf(paymentApproved.getPayId()));

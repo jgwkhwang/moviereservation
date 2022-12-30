@@ -21,7 +21,7 @@
         },
         data: () => ({
             headers: [
-                { text: "movieId", value: "movieId" },
+                { text: "id", value: "id" },
                 { text: "title", value: "title" },
                 { text: "reviewCnt", value: "reviewCnt" },
                 { text: "seatCnt", value: "seatCnt" },
