@@ -71,17 +71,19 @@ public class Reservation  {
     public void onPrePersist(){
 
         // command 
-        ReservationRegistered reservationRegistered = new ReservationRegistered(this);
-        reservationRegistered.publishAfterCommit();
+        /* ReservationRegistered reservationRegistered = new ReservationRegistered(this);
+        reservationRegistered.publishAfterCommit(); */
 
-        ReservationCancelled reservationCancelled = new ReservationCancelled(this);
-        reservationCancelled.publishAfterCommit();
+        /* ReservationCancelled reservationCancelled = new ReservationCancelled(this);
+        reservationCancelled.publishAfterCommit(); */
     }
 
     @PostPersist
     public void onPostPersist() {
         //Following code causes dependency to external APIs
         // it is NOT A GOOD PRACTICE. instead, Event-Policy mapping is recommended.
+
+        System.out.println("[Reservation] onPostPersist");
 
         moviereservation.external.Payment payment = new moviereservation.external.Payment();
         payment.setPayId("P_" + String.valueOf(getId()));
@@ -91,6 +93,8 @@ public class Reservation  {
         payment.setAmount(12000);
         payment.setQty("1");
         // mappings goes here
+
+        System.out.println("[Reservation] call approvePayment");
         ReservationApplication.applicationContext
             .getBean(moviereservation.external.PaymentService.class)
             .approvePayment(payment);
@@ -100,17 +104,17 @@ public class Reservation  {
         );
         reservationRegistered.publishAfterCommit();
 
-        ReservationConfirmed reservationConfirmed = new ReservationConfirmed(
+        /* ReservationConfirmed reservationConfirmed = new ReservationConfirmed(
             this
         );
         reservationConfirmed.publishAfterCommit();
 
         CancelConfirmed cancelConfirmed = new CancelConfirmed(this);
-        cancelConfirmed.publishAfterCommit();
+        cancelConfirmed.publishAfterCommit(); */
     }
+
     @PreRemove
     public void onPreRemove(){
-
 
         ReservationCancelled reservationCancelled = new ReservationCancelled(this);
         reservationCancelled.publishAfterCommit();

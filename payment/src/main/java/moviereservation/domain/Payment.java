@@ -81,8 +81,10 @@ public class Payment  {
     @PostLoad
     public void makeDelay(){
         try {
-            System.out.println("Payment PostLoad Delay...");
-            Thread.currentThread().sleep((long) (400 + Math.random() * 210));
+            System.out.println("Payment PostLoad Delay start...");
+            // Thread.currentThread().sleep((long) (400 + Math.random() * 210));
+            Thread.currentThread().sleep(10000);
+            System.out.println("Payment PostLoad Delay end...");
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

@@ -250,9 +250,63 @@ public class PolicyHandler{
 
 
 ## Request Response
-- Payment에 delay 발생 코드를 작성하여 부하 발생에 따른 요청 실패를 구현한다.
+- 분석 단계에서의 조건 중 하나로 예약 시 예약 가능 상태 확인 호출은 동기식 일관성을 유지하는 트랜잭션으로 처리하기로 하였다. 호출 프로토콜은 이미 앞서 Rest Repository 에 의해 노출되어있는 REST 서비스를 FeignClient 를 이용하여 호출하도록 한다. 또한 예약(reservation) -> 결제(payment) 서비스도 동기식으로 처리하기로 하였다.
+
+[동기식 모델 디자인]
+![image](https://user-images.githubusercontent.com/31139303/210038073-3a995ddd-2315-4d8b-a787-81ee1e8dddec.png)
+
+- 예약 요청을 받은 직후(@PostPersist) 가능상태 확인 및 결제를 동기(Sync)로 요청하도록 처리
+
+```
+# Reservation.java
+...
+   @PostPersist
+    public void onPostPersist() {
+        //Following code causes dependency to external APIs
+        // it is NOT A GOOD PRACTICE. instead, Event-Policy mapping is recommended.
+
+        moviereservation.external.Payment payment = new moviereservation.external.Payment();
+        payment.setPayId("P_" + String.valueOf(getId()));
+        payment.setReservId(getReservId());
+        payment.setStatus("created");
+        payment.setApproveDate("2022-12-29 18:00:00");
+        payment.setAmount(12000);
+        payment.setQty("1");
+        // mappings goes here
+        ReservationApplication.applicationContext
+            .getBean(moviereservation.external.PaymentService.class)
+            .approvePayment(payment);
+...
+```
+
+## Compensation Correlation
+- 본 프로젝트에서는 PolicyHandler에서 처리 시 어떤 건에 대한 처리인지를 구별하기 위한 Correlation-key 구현을 이벤트 클래스 안의 변수로 전달받아 서비스간 연관된 처리를 정확하게 구현하고 있습니다.
+
+아래의 구현 예제를 보면
+
+예약(Reservation)을 하면 동시에 연관된 결제(Payment) 등의 서비스의 상태가 적당하게 변경이 되고, 예약건의 취소를 수행하면 다시 연관된 결제(Payment) 등의 서비스의 상태값 등의 데이터가 적당한 상태로 변경되는 것을 확인할 수 있습니다.
+
+[예약등록 및 예약취소 프로세스]
+- 노란색 : 예약등록 프로세스
+- 빨간색 : 예약취소 프로세스
 ![image](https://user-images.githubusercontent.com/31139303/210036983-d922a0b4-e91d-4d94-a1a1-25999628d6b6.png)
 
+1.예약등록
+
+1-1. 예약등록시 예약상태 (register Reservation) : Created
+![image](https://user-images.githubusercontent.com/31139303/210038483-4634f9ca-b0ef-4690-b3ec-66d6e4fda7bc.png)
+
+1-2. 결재상태 (register payment): Created
+![image](https://user-images.githubusercontent.com/31139303/210038917-9bc54f68-5ce1-4331-ae22-56b0db26eafb.png)
+
+
+2. 예약취소
+
+2-1. 취소시 예약정보는 삭제됨.
+![image](https://user-images.githubusercontent.com/117132766/210037385-316b7b68-17f1-4205-a00c-926dd8c63406.png)
+
+2-2. 결재상태 : Cancelled
+![image](https://user-images.githubusercontent.com/117132766/210037914-3d864687-9f9b-4ec4-aa90-f00ef6c2c4c3.png)
 
 
 
