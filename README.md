@@ -18,8 +18,8 @@
     - [Request Response](#Request-Response)
     - [Circuit Breaker](#Circuit-Breaker)
   - [운영](#운영)
-    - [Gateway Ingress](#Gateway-Ingress)
-    - [Deploy Pipeline](#Deploy-Pipeline)
+    - [Gateway](#Gateway)
+    - [Deploy](#Deploy)
     - [Autoscale](#Autoscale)
     - [Readiness Probe ](#Readiness-Probe )
     - [PV ConfigMap Secret ](#PV-ConfigMap-Secret)
@@ -409,7 +409,9 @@ spec:
           ports:
             - containerPort: 8080
 ```             
+
 - Kubernetes에 생성된 Deploy 확인
+
 ![image](https://user-images.githubusercontent.com/117131347/210037419-5687b526-28e6-4029-a5cb-e2919e6d188b.png)
 
 
