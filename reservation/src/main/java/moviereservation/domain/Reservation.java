@@ -46,12 +46,6 @@ public class Reservation  {
     
     
     
-    private Long paymentId;
-    
-    
-    
-    
-    
     private String status;
     
     

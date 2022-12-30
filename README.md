@@ -1088,11 +1088,11 @@ mvn spring-boot:run
 ## Test by API
 - reservation
 ```
- http :8088/reservations id="id" userId="userId" scheduleId="scheduleId" paymentId="paymentId" status="status" createDate="createDate" updateDate="updateDate" reservId="reservId" 
+ http :8088/reservations id="id" userId="userId" scheduleId="scheduleId" status="status" createDate="createDate" updateDate="updateDate" reservId="reservId" 
 ```
 - payment
 ```
- http :8088/payments paymentId="paymentId" scheduleId="scheduleId" approveDate="approveDate" amount="amount" status="status" qty="qty" reservId="reservId" 
+ http :8088/payments id="id" approveDate="approveDate" amount="amount" status="status" qty="qty" reservId="reservId" payId="payId" 
 ```
 - review
 ```

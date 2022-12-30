@@ -73,6 +73,7 @@
                 'status': '',
                 'qty': '',
                 'reservId': '',
+                'payId': '',
             }
         },
         methods:{

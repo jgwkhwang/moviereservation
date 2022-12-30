@@ -12,9 +12,6 @@
                 <String label="ScheduleId" v-model="item.scheduleId" :editMode="editMode" @change="change" />
             </div>
             <div>
-                <Number label="PaymentId" v-model="item.paymentId" :editMode="editMode" @change="change" />
-            </div>
-            <div>
                 <String label="Status" v-model="item.status" :editMode="editMode" @change="change" />
             </div>
             <div>

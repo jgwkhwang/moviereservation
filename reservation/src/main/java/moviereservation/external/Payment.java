@@ -5,13 +5,13 @@ import java.util.Date;
 @Data
 public class Payment {
 
-    private String paymentId;
-    private String scheduleId;
+    private Long id;
     private String approveDate;
     private Integer amount;
     private String status;
     private String qty;
     private String reservId;
+    private String payId;
 }
 
 

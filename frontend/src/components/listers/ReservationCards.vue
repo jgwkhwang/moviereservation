@@ -70,7 +70,6 @@
             me.newValue = {
                 'userId': '',
                 'scheduleId': '',
-                'paymentId': 0,
                 'status': '',
                 'createDate': '',
                 'updateDate': '',
