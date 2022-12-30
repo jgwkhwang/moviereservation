@@ -310,11 +310,12 @@ public class PolicyHandler{
 
 
 ## Circuit Breaker
-- 
+- Payment에 delay 발생 코드를 작성하여 부하 발생에 따른 요청 실패를 구현한다.
 
 ```
 ...
   # reservation/src/main/resources/application.yml
+  
   feign:
     hystrix:
       enabled: true
@@ -329,10 +330,11 @@ public class PolicyHandler{
 ```
 ...
     # payment/src/main/java/moviereservation/domain/Payment.java
+    
     @PostLoad
     public void makeDelay(){
         try {
-            Thread.currentThread().sleep((long) (1000));
+            Thread.currentThread().sleep((long) (400 + Math.random() * 210));
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
