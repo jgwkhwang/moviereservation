@@ -22,6 +22,7 @@
             <String label="Status" v-model="value.status" :editMode="editMode"/>
             <String label="Qty" v-model="value.qty" :editMode="editMode"/>
             <String label="ReservId" v-model="value.reservId" :editMode="editMode"/>
+            <String label="PaymentId" v-model="value.paymentId" :editMode="editMode"/>
         </v-card-text>
 
         <v-card-actions>

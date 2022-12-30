@@ -13,7 +13,6 @@ public class CancelConfirmed extends AbstractEvent {
     private Long id;
     private String userId;
     private String scheduleId;
-    private Long paymentId;
     private String status;
     private String createDate;
     private String updateDate;

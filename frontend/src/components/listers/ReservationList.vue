@@ -16,14 +16,12 @@
                             
                             
                             
-                            
                         </v-list-item-title>
 
                         <v-list-item-subtitle style="font-size:25px; font-weight:700;">
                             [ Id :  {{data.id }} ] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             [ UserId :  {{data.userId }} ] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             [ ScheduleId :  {{data.scheduleId }} ] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            [ PaymentId :  {{data.paymentId }} ] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             [ Status :  {{data.status }} ] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             [ CreateDate :  {{data.createDate }} ] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             [ UpdateDate :  {{data.updateDate }} ] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -111,7 +109,6 @@
             this.newValue = {
                 'userId': '',
                 'scheduleId': '',
-                'paymentId': 0,
                 'status': '',
                 'createDate': '',
                 'updateDate': '',

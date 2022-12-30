@@ -69,7 +69,6 @@
                     { text: "id", value: "id" },
                     { text: "userId", value: "userId" },
                     { text: "scheduleId", value: "scheduleId" },
-                    { text: "paymentId", value: "paymentId" },
                     { text: "status", value: "status" },
                     { text: "createDate", value: "createDate" },
                     { text: "updateDate", value: "updateDate" },
@@ -93,7 +92,6 @@
             this.newValue = {
                 'userId': '',
                 'scheduleId': '',
-                'paymentId': 0,
                 'status': '',
                 'createDate': '',
                 'updateDate': '',

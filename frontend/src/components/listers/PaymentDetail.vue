@@ -20,6 +20,9 @@
             <div>
                 <String label="ReservId" v-model="item.reservId" :editMode="editMode" @change="change" />
             </div>
+            <div>
+                <String label="PaymentId" v-model="item.paymentId" :editMode="editMode" @change="change" />
+            </div>
         </v-card-text>
 
         <v-card-actions>

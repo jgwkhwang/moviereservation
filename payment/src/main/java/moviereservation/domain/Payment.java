@@ -55,6 +55,12 @@ public class Payment  {
     
     
     private String reservId;
+    
+    
+    
+    
+    
+    private String paymentId;
 
     @PostPersist
     public void onPostPersist(){
