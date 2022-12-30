@@ -211,10 +211,6 @@ public class PolicyHandler{
 ...
 ```
 
-![image](https://user-images.githubusercontent.com/117132766/210037385-316b7b68-17f1-4205-a00c-926dd8c63406.png)
-
-![image](https://user-images.githubusercontent.com/117132766/210037392-c8b14bcb-3d25-4bbb-868a-a7be996049b9.png)
-
 ## CQRS
 - dashboard ReadModel의 데이터 입력/수정/삭제와 조회를 분리한다.
 - 예시로 reservation의 ReservationRegistered 이벤트 발생 시 reservation.id, status를 dashboard.reservId, reservStatus에 반영한다.
@@ -310,7 +306,7 @@ public class PolicyHandler{
 
 # 운영
 
-## Gateway Ingress
+## Gateway
 1. application.yml 파일 내에 profiles 별 routes를 추가.
    gateway 서버의 포트는 8080.
 
@@ -360,8 +356,30 @@ server:
   port: 8080
 
 ```   
+2. Service 
+  Kubernestes용 service.yaml 작성한 후 gateway 엔드포인트 확인.
+- service.yaml 
+```
+apiVersion: v1
+kind: Service
+metadata:
+  name: gateway
+  labels:
+    app: gateway
+spec:
+  ports:
+    - port: 8080
+      targetPort: 8080
+  selector:
+    app: gateway
+  type: LoadBalancer
 
-2. Kubernetes에 Deploy 생성.
+```
+ ![image](https://user-images.githubusercontent.com/117131347/209915789-8005b700-cb18-45a2-afc5-0765afb42052.png) 
+
+## Deploy
+
+- Kubernetes에 Deploy 생성.
 
 - deployment.yml
 ``` 
@@ -388,30 +406,8 @@ spec:
             - containerPort: 8080
 ```             
 - Kubernetes에 생성된 Deploy 확인
-![image](https://user-images.githubusercontent.com/117131347/209910844-100d2aa6-a108-4a91-a12a-0f08a9bf12a2.png)
+![image](https://user-images.githubusercontent.com/117131347/210037419-5687b526-28e6-4029-a5cb-e2919e6d188b.png)
 
-3. Service 
-  Kubernestes용 service.yaml 작성한 후 gateway 엔드포인트 확인.
-- service.yaml 
-```
-apiVersion: v1
-kind: Service
-metadata:
-  name: gateway
-  labels:
-    app: gateway
-spec:
-  ports:
-    - port: 8080
-      targetPort: 8080
-  selector:
-    app: gateway
-  type: LoadBalancer
-
-```
- ![image](https://user-images.githubusercontent.com/117131347/209915789-8005b700-cb18-45a2-afc5-0765afb42052.png) 
-
-## Deploy Pipeline
 
 ## Autoscale
 
