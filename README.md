@@ -211,10 +211,6 @@ public class PolicyHandler{
 ...
 ```
 
-![image](https://user-images.githubusercontent.com/117132766/210037385-316b7b68-17f1-4205-a00c-926dd8c63406.png)
-
-![image](https://user-images.githubusercontent.com/117132766/210037914-3d864687-9f9b-4ec4-aa90-f00ef6c2c4c3.png)
-
 ## CQRS
 - dashboard ReadModel의 데이터 입력/수정/삭제와 조회를 분리한다.
 - 예시로 reservation의 ReservationRegistered 이벤트 발생 시 reservation.id, status를 dashboard.reservId, reservStatus에 반영한다.
@@ -251,13 +247,6 @@ public class PolicyHandler{
 - 위 이벤트 발생에 따라 dashboard 레코드 생성
 
 ![image](https://user-images.githubusercontent.com/117132766/210033018-4c51f155-5582-4f66-9c72-1a3c49bc6f46.png)
-
-
-## Request Response
-- Payment에 delay 발생 코드를 작성하여 부하 발생에 따른 요청 실패를 구현한다.
-![image](https://user-images.githubusercontent.com/31139303/210036983-d922a0b4-e91d-4d94-a1a1-25999628d6b6.png)
-
-
 
 
 ## Circuit Breaker
@@ -310,110 +299,45 @@ public class PolicyHandler{
 
 # 운영
 
-## Gateway
-1. application.yml 파일 내에 profiles 별 routes를 추가.
-   gateway 서버의 포트는 8080.
+## Gateway Ingress
 
-- application.yml
-```
-spring:
-  profiles: docker
-  cloud:
-    gateway:
-      routes:
-        - id: reservation
-          uri: http://reservation:8080
-          predicates:
-            - Path=/reservations/**, 
-        - id: payment
-          uri: http://payment:8080
-          predicates:
-            - Path=/payments/**, 
-        - id: review
-          uri: http://review:8080
-          predicates:
-            - Path=/reviews/**, 
-        - id: dashboard
-          uri: http://dashboard:8080
-          predicates:
-            - Path=, /dashboards/**
-        - id: schedule
-          uri: http://schedule:8080
-          predicates:
-            - Path=/schedules/**, 
-        - id: frontend
-          uri: http://frontend:8080
-          predicates:
-            - Path=/**
-      globalcors:
-        corsConfigurations:
-          '[/**]':
-            allowedOrigins:
-              - "*"
-            allowedMethods:
-              - "*"
-            allowedHeaders:
-              - "*"
-            allowCredentials: true
-
-server:
-  port: 8080
-
-```   
-2. Service 
-  Kubernestes용 service.yaml 작성한 후 gateway 엔드포인트 확인.
-- service.yaml 
-```
-apiVersion: v1
-kind: Service
-metadata:
-  name: gateway
-  labels:
-    app: gateway
-spec:
-  ports:
-    - port: 8080
-      targetPort: 8080
-  selector:
-    app: gateway
-  type: LoadBalancer
-
-```
- ![image](https://user-images.githubusercontent.com/117131347/209915789-8005b700-cb18-45a2-afc5-0765afb42052.png) 
-
-## Deploy
-
-- Kubernetes에 Deploy 생성.
-
-- deployment.yml
-``` 
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: gateway
-  labels:
-    app: gateway
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: gateway
-  template:
-    metadata:
-      labels:
-        app: gateway
-    spec:
-      containers:
-        - name: gateway
-          image: username/gateway:latest
-          ports:
-            - containerPort: 8080
-```             
-- Kubernetes에 생성된 Deploy 확인
-![image](https://user-images.githubusercontent.com/117131347/210037419-5687b526-28e6-4029-a5cb-e2919e6d188b.png)
-
+## Deploy Pipeline
 
 ## Autoscale
+앞서 CB 는 시스템을 안정되게 운영할 수 있게 해줬지만 사용자의 요청을 100% 받아들여주지 못했기 때문에 이에 대한 보완책으로 자동화된 확장 기능을 적용하고자 한다.
+
+- Reservation deployment.yml 파일에 resources 설정을 추가한다.
+
+![image](https://user-images.githubusercontent.com/98464146/210037454-6ba83845-3b51-48a0-8d1a-e40d1c23662b.png)
+
+- 결제서비스에 대한 replica 를 동적으로 늘려주도록 HPA 를 설정한다. 설정은 CPU 사용량이 15프로를 넘어서면 replica 를 10개까지 늘려준다:
+
+```
+kubectl autoscale deploy reservation --min=1 --max=10 --cpu-percent=15
+```
+
+- CB 에서 했던 방식대로 워크로드를 2분 동안 걸어준다.
+  동시 사용자 100명, 2분 동안 실시
+
+```
+siege -c100 -t120S --content-type "application/json" 'http://reservation:8080 POST {"status": "created"}'
+```
+
+- 오토스케일이 어떻게 되고 있는지 모니터링을 걸어둔다
+
+
+```
+kubectl get deploy reservation -w
+```
+
+- 어느정도 시간이 흐른 후 (약 30초) 스케일 아웃이 벌어지는 것을 확인할 수 있다.
+
+![image](https://user-images.githubusercontent.com/98464146/210038195-63191b70-fb23-4c6f-b00d-c6047d4f7ce9.png)
+
+- siege 의 로그를 보아도 전체적인 성공률이 높아진 것을 확인 할 수 있다.
+
+![image](https://user-images.githubusercontent.com/98464146/210038303-cc363234-0e48-4354-ab61-e8733fe5f248.png)
+
 
 ## Readiness Probe 
 
