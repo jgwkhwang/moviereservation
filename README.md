@@ -474,6 +474,7 @@ spec:
 
 
 ## Autoscale
+
 앞서 CB 는 시스템을 안정되게 운영할 수 있게 해줬지만 사용자의 요청을 100% 받아들여주지 못했기 때문에 이에 대한 보완책으로 자동화된 확장 기능을 적용하고자 한다.
 
 - Reservation deployment.yml 파일에 resources 설정을 추가한다.
@@ -541,7 +542,7 @@ kubectl apply -f deployment.yml
 
 ![image](https://user-images.githubusercontent.com/98464146/210039743-7931e579-09f7-425c-bef6-d5372b7e62a6.png)
 
-배포기간중 Availability 가 평소 100%에서 70% 대로 떨어지는 것을 확인. 
+배포기간중 Availability 가 평소 100%에서 80% 대로 떨어지는 것을 확인. 
 원인은 쿠버네티스가 성급하게 새로 올려진 서비스를 READY 상태로 인식하여 서비스 유입을 진행한 것이기 때문. 이를 막기위해 Readiness Probe 를 설정함
 
 - reservation deployment.yml 파일 수정
@@ -562,5 +563,25 @@ kubectl apply -f deployment.yml
 ## PV ConfigMap Secre
 
 ## Liveness Probe
+
+- reservation deployment.yml  파일 수정
+
+  콘테이너 실행 후 /tmp/healthy 파일을 만들고 60초 후 삭제
+  livenessProbe에 'cat /tmp/healthy'으로 검증하도록 함
+
+![image](https://user-images.githubusercontent.com/98464146/210040947-0bd9c96d-bcab-40e0-a1e2-0a63c37e2b5d.png)
+
+  컨테이너 실행 후 60초 동인은 정상이나 이후 /tmp/healthy 파일이 삭제되어 livenessProbe에서 실패를 리턴하게 됨
+  pod 정상 상태 일때 pod 진입하여 /tmp/healthy 파일 생성해주면 정상 상태 유지됨
+  ( 참고, /tmp/healthy파일을 생성해 주지 않으면,,, 배포/실행/재시작 이 무한 반복 됨. RESTART횟수 증가 )
+
+- kubectl describe pod reservation 실행으로 확인
+
+![image](https://user-images.githubusercontent.com/98464146/210041096-b907f621-741f-4731-9e69-85548ed9557f.png)
+
+- Kubectl get pod명  싱행으로 Restart 횟수가 증가 됨을 확인
+
+![image](https://user-images.githubusercontent.com/98464146/210041153-d06d4aec-0074-4b52-9f13-f8c4a127cfcf.png)
+
 
 ## Loggregation Monitoring
