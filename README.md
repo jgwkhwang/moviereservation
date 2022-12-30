@@ -474,7 +474,6 @@ spec:
 
 
 ## Autoscale
-
 앞서 CB 는 시스템을 안정되게 운영할 수 있게 해줬지만 사용자의 요청을 100% 받아들여주지 못했기 때문에 이에 대한 보완책으로 자동화된 확장 기능을 적용하고자 한다.
 
 - Reservation deployment.yml 파일에 resources 설정을 추가한다.
@@ -542,7 +541,7 @@ kubectl apply -f deployment.yml
 
 ![image](https://user-images.githubusercontent.com/98464146/210039743-7931e579-09f7-425c-bef6-d5372b7e62a6.png)
 
-배포기간중 Availability 가 평소 100%에서 80% 대로 떨어지는 것을 확인. 
+배포기간중 Availability 가 평소 100%에서 70% 대로 떨어지는 것을 확인. 
 원인은 쿠버네티스가 성급하게 새로 올려진 서비스를 READY 상태로 인식하여 서비스 유입을 진행한 것이기 때문. 이를 막기위해 Readiness Probe 를 설정함
 
 - reservation deployment.yml 파일 수정
@@ -560,28 +559,96 @@ kubectl apply -f deployment.yml
 배포기간 동안 Availability 가 변화없기 때문에 무정지 재배포가 성공한 것으로 확인됨
 
 
-## PV ConfigMap Secre
+## PV
+1. EFS 생성 및 security group 생성
+
+![image](https://user-images.githubusercontent.com/118946107/210042040-15f53591-621a-4b78-9900-0136b794aa3d.png)
+
+![image](https://user-images.githubusercontent.com/118946107/210042076-d07df316-aedb-4483-85e1-90ace1345a84.png)
+
+
+2. EFS 계정 생성 및 ROLE 바인딩
+
+![image](https://user-images.githubusercontent.com/118946107/210042344-69757b14-22ed-4903-b169-a4bdff245b7c.png)
+
+3. EFS Provisioner 배포 / 설치한 Provisioner storageclass에 등록
+
+![image](https://user-images.githubusercontent.com/118946107/210042391-3ac902cf-ea46-4fa1-9b8f-4c292ba73950.png)
+
+![image](https://user-images.githubusercontent.com/118946107/210042427-98837103-3032-475a-8753-f60a765dded2.png)
+
+4. PVC(PersistentVolumeClaim) 생성
+
+![image](https://user-images.githubusercontent.com/118946107/210042466-9f5aa82e-f2b8-496d-bd4e-7dc79d0f9aaf.png)
+
+
+5. 볼륨을 가지는 마이크로서비스 배포
+
+![image](https://user-images.githubusercontent.com/118946107/210042511-9d2d338d-36ef-4628-b48e-2008c7f3b01d.png)
+
+6. pod에서 마운트된 경로 파일 생성 및 확인
+
+![image](https://user-images.githubusercontent.com/118946107/210042639-df3de277-1013-49ea-9303-7c1ffd6615f1.png)
 
 ## Liveness Probe
 
-- reservation deployment.yml  파일 수정
+## Loggregation
 
-  콘테이너 실행 후 /tmp/healthy 파일을 만들고 60초 후 삭제
-  livenessProbe에 'cat /tmp/healthy'으로 검증하도록 함
+1. ElasticSearch 설치
 
-![image](https://user-images.githubusercontent.com/98464146/210040947-0bd9c96d-bcab-40e0-a1e2-0a63c37e2b5d.png)
+- helm repo add elastic https://helm.elastic.co
 
-  컨테이너 실행 후 60초 동인은 정상이나 이후 /tmp/healthy 파일이 삭제되어 livenessProbe에서 실패를 리턴하게 됨
-  pod 정상 상태 일때 pod 진입하여 /tmp/healthy 파일 생성해주면 정상 상태 유지됨
-  ( 참고, /tmp/healthy파일을 생성해 주지 않으면,,, 배포/실행/재시작 이 무한 반복 됨. RESTART횟수 증가 )
+- helm repo update
 
-- kubectl describe pod reservation 실행으로 확인
+- helm show values elastic/elasticsearch > es-value.yml
 
-![image](https://user-images.githubusercontent.com/98464146/210041096-b907f621-741f-4731-9e69-85548ed9557f.png)
+- vi es-value.yml
 
-- Kubectl get pod명  싱행으로 Restart 횟수가 증가 됨을 확인
+![image](https://user-images.githubusercontent.com/118946107/210042809-d2cbba20-d342-4e6d-b918-91e29dd038a7.png)
 
-![image](https://user-images.githubusercontent.com/98464146/210041153-d06d4aec-0074-4b52-9f13-f8c4a127cfcf.png)
+- kubectl create namespace logging
 
+- helm install elastic elastic/elasticsearch -f es-value.yml -n logging
 
-## Loggregation Monitoring
+- kubectl get all -n logging
+
+![image](https://user-images.githubusercontent.com/118946107/210042863-2a127089-2143-40ac-a27f-aba5e78de2bb.png)
+
+2. FluentBit 설치
+- git clone https://github.com/fluent/fluent-bit-kubernetes-logging.git
+
+- cd fluent-bit-kubernetes-logging/
+
+- kubectl create -f fluent-bit-service-account.yaml -n logging
+
+- kubectl create -f fluent-bit-role-1.22.yaml -n logging
+
+- kubectl create -f fluent-bit-role-binding-1.22.yaml -n logging
+
+- vi fluent-bit-ds.yaml
+
+![image](https://user-images.githubusercontent.com/118946107/210042963-f03048ee-28a1-446d-92e6-79a829264c61.png)
+
+- vi fluent-bit-configmap.yaml
+
+![image](https://user-images.githubusercontent.com/118946107/210043022-7a9cdf42-cbb1-45ae-b6e6-95edf7d53391.png)
+
+- kubectl apply -f fluent-bit-configmap.yaml -n logging
+- kubectl apply -f fluent-bit-ds.yaml -n logging
+
+3. Kibana 설치
+
+- helm show values elastic/kibana > kibana-value.yml
+
+- vi kibana-value.yml
+
+![image](https://user-images.githubusercontent.com/118946107/210043126-1b8e4bf4-ccb5-4e5c-8a21-9ccdacbb15eb.png)
+
+![image](https://user-images.githubusercontent.com/118946107/210043097-48b5056b-d2be-4389-8789-bb2f8946412b.png)
+
+- helm install kibana elastic/kibana -f kibana-value.yml -n logging
+
+4. Kibana를 통한 로깅 확인
+
+![image](https://user-images.githubusercontent.com/118946107/210043164-994692ee-0f48-4518-ae19-b28c5ea37a4b.png)
+
