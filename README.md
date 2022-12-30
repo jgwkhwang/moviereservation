@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # 예제 - 영화예매
 
 본 예제는 MSA/DDD/Event Storming/EDA 를 포괄하는 분석/설계/구현/운영 전단계를 커버하도록 구성한 예제입니다.
@@ -13,7 +12,7 @@
   - [체크포인트](#체크포인트)
   - [분석/설계](#분석설계)
   - [구현:](#구현-)
-    - [DDD 의 적용](#ddd-의-적용)
+    - [Saga : kafka MQ](#Saga : kafka MQ)
     - [폴리글랏 퍼시스턴스](#폴리글랏-퍼시스턴스)
     - [폴리글랏 프로그래밍](#폴리글랏-프로그래밍)
     - [동기식 호출 과 Fallback 처리](#동기식-호출-과-Fallback-처리)
@@ -126,42 +125,9 @@
 
 
 ## Event Storming 결과
-* MSAEz 로 모델링한 이벤트스토밍 결과:  http://msaez.io/#/storming/nZJ2QhwVc4NlVJPbtTkZ8x9jclF2/every/a77281d704710b0c2e6a823b6e6d973a/-M5AV2z--su_i4BfQfeF
+* MSAEz 로 모델링한 이벤트스토밍 결과: https://labs.msaez.io/#/storming/24effc668ce374dd71b64a9c7a4a2d2e
 
-
-### 이벤트 도출
-![image](https://user-images.githubusercontent.com/487999/79683604-47bc0180-8266-11ea-9212-7e88c9bf9911.png)
-
-### 부적격 이벤트 탈락
-![image](https://user-images.githubusercontent.com/487999/79683612-4b4f8880-8266-11ea-9519-7e084524a462.png)
-
-    - 과정중 도출된 잘못된 도메인 이벤트들을 걸러내는 작업을 수행함
-        - 주문시>메뉴카테고리선택됨, 주문시>메뉴검색됨 :  UI 의 이벤트이지, 업무적인 의미의 이벤트가 아니라서 제외
-
-### 액터, 커맨드 부착하여 읽기 좋게
-![image](https://user-images.githubusercontent.com/487999/79683614-4ee30f80-8266-11ea-9a50-68cdff2dcc46.png)
-
-### 어그리게잇으로 묶기
-![image](https://user-images.githubusercontent.com/487999/79683618-52769680-8266-11ea-9c21-48d6812444ba.png)
-
-    - app의 Order, store 의 주문처리, 결제의 결제이력은 그와 연결된 command 와 event 들에 의하여 트랜잭션이 유지되어야 하는 단위로 그들 끼리 묶어줌
-
-### 바운디드 컨텍스트로 묶기
-
-![image](https://user-images.githubusercontent.com/487999/79683625-560a1d80-8266-11ea-9790-40d68a36d95d.png)
-
-    - 도메인 서열 분리 
-        - Core Domain:  app(front), store : 없어서는 안될 핵심 서비스이며, 연견 Up-time SLA 수준을 99.999% 목표, 배포주기는 app 의 경우 1주일 1회 미만, store 의 경우 1개월 1회 미만
-        - Supporting Domain:   marketing, customer : 경쟁력을 내기위한 서비스이며, SLA 수준은 연간 60% 이상 uptime 목표, 배포주기는 각 팀의 자율이나 표준 스프린트 주기가 1주일 이므로 1주일 1회 이상을 기준으로 함.
-        - General Domain:   pay : 결제서비스로 3rd Party 외부 서비스를 사용하는 것이 경쟁력이 높음 (핑크색으로 이후 전환할 예정)
-
-### 폴리시 부착 (괄호는 수행주체, 폴리시 부착을 둘째단계에서 해놔도 상관 없음. 전체 연계가 초기에 드러남)
-
-![image](https://user-images.githubusercontent.com/487999/79683633-5aced180-8266-11ea-8f42-c769eb88dfb1.png)
-
-### 폴리시의 이동과 컨텍스트 매핑 (점선은 Pub/Sub, 실선은 Req/Resp)
-
-![image](https://user-images.githubusercontent.com/487999/79683641-5f938580-8266-11ea-9fdb-4e80ff6642fe.png)
+![image](https://user-images.githubusercontent.com/31139303/210032959-fe7d46f6-6d87-4145-9e28-2018f5d88240.png)
 
 ### 완성된 1차 모형
 
@@ -231,7 +197,7 @@ cd customer
 python policy-handler.py 
 ```
 
-## Saga
+## Saga : kafka MQ
 - 고객(customer)에 의해 reservation에서 예약이 취소되어 ReservationCancelled 이벤트가 발생할 경우, Kafka MQ를 통해 pub-sub 방식으로 payment에서 cancelPayment가 작동된다.
 
 ```
@@ -307,10 +273,6 @@ public class PolicyHandler{
 
 ...
 ```
-
-![image](https://user-images.githubusercontent.com/117132766/210033007-6a787fd9-0f42-4e6f-bca6-825f11e5860a.png)
-
-![image](https://user-images.githubusercontent.com/117132766/210033018-4c51f155-5582-4f66-9c72-1a3c49bc6f46.png)
 
 
 ## Circuit Breaker
