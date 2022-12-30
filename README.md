@@ -304,30 +304,74 @@ public class PolicyHandler{
 
 # 운영
 
-## Gateway Ingress
+## Gateway
 
-## Deploy Pipeline
+1. application.yml 파일 내에 profiles 별 routes를 추가.
+   gateway 서버의 포트는 8080.
 
-## Autoscale
-앞서 CB 는 시스템을 안정되게 운영할 수 있게 해줬지만 사용자의 요청을 100% 받아들여주지 못했기 때문에 이에 대한 보완책으로 자동화된 확장 기능을 적용하고자 한다.
-
-- Reservation deployment.yml 파일에 resources 설정을 추가한다.
-
-![image](https://user-images.githubusercontent.com/98464146/210037454-6ba83845-3b51-48a0-8d1a-e40d1c23662b.png)
-
-- 결제서비스에 대한 replica 를 동적으로 늘려주도록 HPA 를 설정한다. 설정은 CPU 사용량이 15프로를 넘어서면 replica 를 10개까지 늘려준다:
-
+- application.yml
 ```
-kubectl autoscale deploy reservation --min=1 --max=10 --cpu-percent=15
-```
+spring:
+  profiles: docker
+  cloud:
+    gateway:
+      routes:
+        - id: reservation
+          uri: http://reservation:8080
+          predicates:
+            - Path=/reservations/**, 
+        - id: payment
+          uri: http://payment:8080
+          predicates:
+            - Path=/payments/**, 
+        - id: review
+          uri: http://review:8080
+          predicates:
+            - Path=/reviews/**, 
+        - id: dashboard
+          uri: http://dashboard:8080
+          predicates:
+            - Path=, /dashboards/**
+        - id: schedule
+          uri: http://schedule:8080
+          predicates:
+            - Path=/schedules/**, 
+        - id: frontend
+          uri: http://frontend:8080
+          predicates:
+            - Path=/**
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins:
+              - "*"
+            allowedMethods:
+              - "*"
+            allowedHeaders:
+              - "*"
+            allowCredentials: true
+server:
+  port: 8080
+```   
 
-- CB 에서 했던 방식대로 워크로드를 2분 동안 걸어준다.
-  동시 사용자 100명, 2분 동안 실시
-
+2. Service 
+  Kubernestes용 service.yaml 작성한 후 gateway 엔드포인트 확인.
+- service.yaml 
 ```
-siege -c100 -t120S --content-type "application/json" 'http://reservation:8080 POST {"status": "created"}'
+apiVersion: v1
+kind: Service
+metadata:
+  name: gateway
+  labels:
+    app: gateway
+spec:
+  ports:
+    - port: 8080
+      targetPort: 8080
+  selector:
+    app: gateway
+  type: LoadBalancer
 ```
-
  ![image](https://user-images.githubusercontent.com/117131347/209915789-8005b700-cb18-45a2-afc5-0765afb42052.png) 
 
 ## Deploy
@@ -362,6 +406,31 @@ spec:
 - Kubernetes에 생성된 Deploy 확인
 
 ![image](https://user-images.githubusercontent.com/117131347/210037419-5687b526-28e6-4029-a5cb-e2919e6d188b.png)
+
+
+## Autoscale
+앞서 CB 는 시스템을 안정되게 운영할 수 있게 해줬지만 사용자의 요청을 100% 받아들여주지 못했기 때문에 이에 대한 보완책으로 자동화된 확장 기능을 적용하고자 한다.
+
+- Reservation deployment.yml 파일에 resources 설정을 추가한다.
+
+![image](https://user-images.githubusercontent.com/98464146/210037454-6ba83845-3b51-48a0-8d1a-e40d1c23662b.png)
+
+- 결제서비스에 대한 replica 를 동적으로 늘려주도록 HPA 를 설정한다. 설정은 CPU 사용량이 15프로를 넘어서면 replica 를 10개까지 늘려준다:
+
+```
+kubectl autoscale deploy reservation --min=1 --max=10 --cpu-percent=15
+```
+
+- CB 에서 했던 방식대로 워크로드를 2분 동안 걸어준다.
+  동시 사용자 100명, 2분 동안 실시
+
+```
+siege -c100 -t120S --content-type "application/json" 'http://reservation:8080 POST {"status": "created"}'
+```
+
+ ![image](https://user-images.githubusercontent.com/117131347/209915789-8005b700-cb18-45a2-afc5-0765afb42052.png) 
+
+
 =======
 
 - 오토스케일이 어떻게 되고 있는지 모니터링을 걸어둔다
