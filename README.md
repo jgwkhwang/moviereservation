@@ -294,23 +294,28 @@ public class PolicyHandler{
 [예약등록 및 예약취소 프로세스]
 - 노란색 : 예약등록 프로세스
 - 빨간색 : 예약취소 프로세스
+
 ![image](https://user-images.githubusercontent.com/31139303/210036983-d922a0b4-e91d-4d94-a1a1-25999628d6b6.png)
 
 1.예약등록
 
 1-1. 예약등록시 예약상태 (register Reservation) : Created
+
 ![image](https://user-images.githubusercontent.com/31139303/210038483-4634f9ca-b0ef-4690-b3ec-66d6e4fda7bc.png)
 
 1-2. 결재상태 (register payment): Created
+
 ![image](https://user-images.githubusercontent.com/31139303/210038917-9bc54f68-5ce1-4331-ae22-56b0db26eafb.png)
 
 
 2. 예약취소
 
 2-1. 취소시 예약정보는 삭제됨.
+
 ![image](https://user-images.githubusercontent.com/117132766/210037385-316b7b68-17f1-4205-a00c-926dd8c63406.png)
 
 2-2. 결재상태 : Cancelled
+
 ![image](https://user-images.githubusercontent.com/117132766/210037914-3d864687-9f9b-4ec4-aa90-f00ef6c2c4c3.png)
 
 
