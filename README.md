@@ -244,7 +244,7 @@ public class PolicyHandler{
 
 ![image](https://user-images.githubusercontent.com/117132766/210033007-6a787fd9-0f42-4e6f-bca6-825f11e5860a.png)
 
-- 위 이벤트 발생에 따라 approvePayment 커맨드를 거쳐 Payment 레코드 생성
+- 위 이벤트 발생에 따라 dashboard 레코드 생성
 
 ![image](https://user-images.githubusercontent.com/117132766/210033018-4c51f155-5582-4f66-9c72-1a3c49bc6f46.png)
 
