@@ -308,6 +308,10 @@ public class PolicyHandler{
 ...
 ```
 
+![image](https://user-images.githubusercontent.com/117132766/210033007-6a787fd9-0f42-4e6f-bca6-825f11e5860a.png)
+
+![image](https://user-images.githubusercontent.com/117132766/210033018-4c51f155-5582-4f66-9c72-1a3c49bc6f46.png)
+
 
 ## Circuit Breaker
 - Payment에 delay 발생 코드를 작성하여 부하 발생에 따른 요청 실패를 구현한다.
