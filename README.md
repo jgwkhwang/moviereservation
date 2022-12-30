@@ -280,6 +280,38 @@ public class PolicyHandler{
 ...
 ```
 
+## CQRS
+- dashboard ReadModel의 데이터 입력/수정/삭제와 조회를 분리한다.
+- 예시로 reservation의 ReservationRegistered 이벤트 발생 시 reservation.id, status를 dashboard.reservId, reservStatus에 반영한다.
+
+```
+...
+  #dashboard/src/main/java/moviereservation/infra/DashboardViewHandler.java
+
+  // 2. CQRS
+    @StreamListener(KafkaProcessor.INPUT)
+    public void whenReservationRegistered_then_CREATE_1 (@Payload ReservationRegistered reservationRegistered) {
+        // CQRS-1. ReservationRegistered 이벤트 발생 시
+        try {
+            System.out.println("dashboard view handler try block");
+            if (!reservationRegistered.validate()) return;
+            // CQRS-1. ReservationRegistered의 id, status를 dashboard에 저장
+            Dashboard dashboard = new Dashboard();
+            dashboard.setReservId(Long.valueOf(reservationRegistered.getId()));
+            dashboard.setReservStatus(reservationRegistered.getStatus());
+            dashboardRepository.save(dashboard);
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+...
+```
+
+
+## Circuit Breaker
+
 ## DDD 의 적용
 
 - 각 서비스내에 도출된 핵심 Aggregate Root 객체를 Entity 로 선언하였다: (예시는 pay 마이크로 서비스). 이때 가능한 현업에서 사용하는 언어 (유비쿼터스 랭귀지)를 그대로 사용하려고 노력했다. 하지만, 일부 구현에 있어서 영문이 아닌 경우는 실행이 불가능한 경우가 있기 때문에 계속 사용할 방법은 아닌것 같다. (Maven pom.xml, Kafka의 topic id, FeignClient 의 서비스 id 등은 한글로 식별자를 사용하는 경우 오류가 발생하는 것을 확인하였다)
