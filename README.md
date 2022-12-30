@@ -234,7 +234,32 @@ python policy-handler.py
 ## Saga
 - 고객(customer)에 의해 reservation에서 예약이 취소되어 ReservationCancelled 이벤트가 발생할 경우, Kafka를 통해 pub-sub 방식으로 payment에서 cancelPayment가 작동된다.
 
+```
+#payment/src/main/java/moviereservation/infra/PolicyHandler.java
 
+@Service
+@Transactional
+public class PolicyHandler{
+    @Autowired PaymentRepository paymentRepository;
+    
+    @StreamListener(KafkaProcessor.INPUT)
+    public void whatever(@Payload String eventString){}
+
+    // 1. Saga
+    @StreamListener(value=KafkaProcessor.INPUT, condition="headers['type']=='ReservationCancelled'")
+    public void wheneverReservationCancelled_CancelPayment(@Payload ReservationCancelled reservationCancelled){
+
+        System.out.println("\n\n##### listener CancelPayment : " + reservationCancelled + "\n\n");
+        try {
+            if(!reservationCancelled.validate()) return;
+            // Saga-1. cancelPayment Policy 호출
+            Payment.cancelPayment(reservationCancelled);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+    }
+```
 
 ## DDD 의 적용
 
