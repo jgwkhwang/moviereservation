@@ -16,9 +16,16 @@ spec:
     spec:
       containers:
         - name: reservation
-          image: hyunjunghh/reservation:1.0
+          image: hyunjunghh/reservation:1.1
           ports:
             - containerPort: 8080
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "500m"
+            limits:
+              memory: "512Mi"
+              cpu: "1500m"
           #readinessProbe:
           #  httpGet:
           #    path: '/actuator/health'

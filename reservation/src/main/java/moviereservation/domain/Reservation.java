@@ -89,6 +89,7 @@ public class Reservation  {
 
        
         moviereservation.external.Payment payment = new moviereservation.external.Payment();
+        payment.setPaymentId("P_" + String.valueOf(getId()));
         payment.setReservId(getReservId());
         payment.setStatus("created");
         payment.setApproveDate("2022-12-29 18:00:00");
