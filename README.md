@@ -12,7 +12,7 @@
   - [체크포인트](#체크포인트)
   - [분석/설계](#분석설계)
   - [구현:](#구현-)
-    - [Saga : kafka MQ](#Saga : kafka MQ)
+    - [Saga kafka MQ](#Saga-kafka MQ)
     - [폴리글랏 퍼시스턴스](#폴리글랏-퍼시스턴스)
     - [폴리글랏 프로그래밍](#폴리글랏-프로그래밍)
     - [동기식 호출 과 Fallback 처리](#동기식-호출-과-Fallback-처리)
@@ -157,7 +157,7 @@ cd customer
 python policy-handler.py 
 ```
 
-## Saga : kafka MQ
+## Saga-kafka MQ
 - 고객(customer)에 의해 reservation에서 예약이 취소되어 ReservationCancelled 이벤트가 발생할 경우, Kafka MQ를 통해 pub-sub 방식으로 payment에서 cancelPayment가 작동된다.
 
 ```
