@@ -235,9 +235,8 @@ python policy-handler.py
 - 고객(customer)에 의해 reservation에서 예약이 취소되어 ReservationCancelled 이벤트가 발생할 경우, Kafka MQ를 통해 pub-sub 방식으로 payment에서 cancelPayment가 작동된다.
 
 ```
-#payment/src/main/java/moviereservation/infra/PolicyHandler.java
-
 ...
+# payment/src/main/java/moviereservation/infra/PolicyHandler.java
 
 @Service
 @Transactional
@@ -266,8 +265,8 @@ public class PolicyHandler{
 ```
 
 ```
-#payment/src/main/java/moviereservation/domain/Payment.java
 ...
+    # payment/src/main/java/moviereservation/domain/Payment.java
     public static void cancelPayment(ReservationCancelled reservationCancelled){
 
         //Saga-2. ReservationCanclled event에서 넘어온 paymentId(Payment의 PK)로 Payment 레코드 검색
@@ -286,7 +285,7 @@ public class PolicyHandler{
 
 ```
 ...
-  #dashboard/src/main/java/moviereservation/infra/DashboardViewHandler.java
+  # dashboard/src/main/java/moviereservation/infra/DashboardViewHandler.java
 
   // 2. CQRS
     @StreamListener(KafkaProcessor.INPUT)
@@ -311,6 +310,53 @@ public class PolicyHandler{
 
 
 ## Circuit Breaker
+- Payment에 delay 발생 코드를 작성하여 부하 발생에 따른 요청 실패를 구현한다.
+
+```
+...
+  # reservation/src/main/resources/application.yml
+  
+  feign:
+    hystrix:
+      enabled: true
+
+  hystrix:
+    command:
+      default:
+        execution.isolation.thread.timeoutInMilliseconds: 600
+...
+```
+
+```
+...
+    # payment/src/main/java/moviereservation/domain/Payment.java
+    
+    @PostLoad
+    public void makeDelay(){
+        try {
+            Thread.currentThread().sleep((long) (400 + Math.random() * 210));
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+     }
+
+...
+```
+
+
+```
+...
+    # reservation/src/main/moviereservation/external/PaymentService.java
+
+    @FeignClient(name = "payment", url = "${api.url.payment}")
+    public interface PaymentService {
+        @RequestMapping(method= RequestMethod.POST, path="/payments")
+        public void approvePayment(@RequestBody Payment payment);
+    }
+
+...
+```
+
 
 ## DDD 의 적용
 
