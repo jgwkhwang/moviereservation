@@ -22,10 +22,10 @@ spec:
           resources:
             requests:
               memory: "256Mi"
-              cpu: "500m"
+              cpu: "1000m"
             limits:
               memory: "512Mi"
-              cpu: "1500m"
+              cpu: "2500m"
           #readinessProbe:
           #  httpGet:
           #    path: '/actuator/health'

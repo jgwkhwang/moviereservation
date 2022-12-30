@@ -36,14 +36,14 @@ public class DashboardViewHandler {
     }
 
 
-    @StreamListener(KafkaProcessor.INPUT)
+    /* @StreamListener(KafkaProcessor.INPUT)
     public void whenPaymentApproved_then_CREATE_1 (@Payload PaymentApproved paymentApproved) {
         try {
 
             if (!paymentApproved.validate()) return;
 
             Dashboard dashboard = new Dashboard();
-            dashboard.setPaymentId(Long.valueOf(paymentApproved.getPaymentId()));
+            dashboard.setPaymentId(Long.valueOf(paymentApproved.getPayId()));
             dashboard.setPaymentStatus(paymentApproved.getStatus());
             dashboardRepository.save(dashboard);
 
@@ -85,7 +85,7 @@ public class DashboardViewHandler {
         }catch (Exception e){
             e.printStackTrace();
         }
-    }
+    } */
     
 
 

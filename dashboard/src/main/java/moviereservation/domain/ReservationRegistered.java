@@ -13,6 +13,6 @@ public class ReservationRegistered extends AbstractEvent {
     private Long scheduleId;
     private Long paymentId;
     private String status;
-    private Date createDate;
-    private Date updateDate;
+    private String createDate;
+    private String updateDate;
 }

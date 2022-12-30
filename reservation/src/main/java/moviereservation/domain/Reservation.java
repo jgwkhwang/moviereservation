@@ -79,35 +79,34 @@ public class Reservation  {
     }
 
     @PostPersist
-    public void onPostPersist(){
+    public void onPostPersist() {
+        //Following code causes dependency to external APIs
+        // it is NOT A GOOD PRACTICE. instead, Event-Policy mapping is recommended.
 
-       
         moviereservation.external.Payment payment = new moviereservation.external.Payment();
-        payment.setPaymentId("P_" + String.valueOf(getId()));
+        payment.setPayId("P_" + String.valueOf(getId()));
         payment.setReservId(getReservId());
         payment.setStatus("created");
         payment.setApproveDate("2022-12-29 18:00:00");
         payment.setAmount(12000);
         payment.setQty("1");
-
         // mappings goes here
-        ReservationApplication.applicationContext.getBean(moviereservation.external.PaymentService.class)
+        ReservationApplication.applicationContext
+            .getBean(moviereservation.external.PaymentService.class)
             .approvePayment(payment);
 
-
-        ReservationRegistered reservationRegistered = new ReservationRegistered(this);
+        ReservationRegistered reservationRegistered = new ReservationRegistered(
+            this
+        );
         reservationRegistered.publishAfterCommit();
 
-
-
-        ReservationConfirmed reservationConfirmed = new ReservationConfirmed(this);
+        ReservationConfirmed reservationConfirmed = new ReservationConfirmed(
+            this
+        );
         reservationConfirmed.publishAfterCommit();
-
-
 
         CancelConfirmed cancelConfirmed = new CancelConfirmed(this);
         cancelConfirmed.publishAfterCommit();
-
     }
     @PreRemove
     public void onPreRemove(){
