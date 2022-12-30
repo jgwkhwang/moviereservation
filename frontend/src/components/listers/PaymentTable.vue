@@ -72,7 +72,7 @@
                     { text: "status", value: "status" },
                     { text: "qty", value: "qty" },
                     { text: "reservId", value: "reservId" },
-                    { text: "paymentId", value: "paymentId" },
+                    { text: "payId", value: "payId" },
                 ],
             payment : [],
             newValue: {},
@@ -95,7 +95,7 @@
                 'status': '',
                 'qty': '',
                 'reservId': '',
-                'paymentId': '',
+                'payId': '',
             }
         },
         methods: {

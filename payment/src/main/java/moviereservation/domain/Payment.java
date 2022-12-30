@@ -60,7 +60,7 @@ public class Payment  {
     
     
     
-    private String paymentId;
+    private String payId;
 
     @PostPersist
     public void onPostPersist(){

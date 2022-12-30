@@ -11,7 +11,7 @@ public class Payment {
     private String status;
     private String qty;
     private String reservId;
-    private String paymentId;
+    private String payId;
 }
 
 

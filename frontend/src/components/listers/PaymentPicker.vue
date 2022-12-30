@@ -30,7 +30,7 @@
                                 ReservId :  {{item.reservId }}
                             </v-list-item-subtitle>
                             <v-list-item-subtitle>
-                                PaymentId :  {{item.paymentId }}
+                                PayId :  {{item.payId }}
                             </v-list-item-subtitle>
                         </v-list-item-content>
 

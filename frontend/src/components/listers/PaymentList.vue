@@ -25,7 +25,7 @@
                             [ Status :  {{data.status }} ] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             [ Qty :  {{data.qty }} ] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             [ ReservId :  {{data.reservId }} ] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            [ PaymentId :  {{data.paymentId }} ] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            [ PayId :  {{data.payId }} ] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         </v-list-item-subtitle>
 
                     </v-list-item-content>
@@ -112,7 +112,7 @@
                 'status': '',
                 'qty': '',
                 'reservId': '',
-                'paymentId': '',
+                'payId': '',
             }
         },
         methods: {

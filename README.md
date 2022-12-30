@@ -40,7 +40,7 @@ mvn spring-boot:run
 ```
 - payment
 ```
- http :8088/payments id="id" approveDate="approveDate" amount="amount" status="status" qty="qty" reservId="reservId" paymentId="paymentId" 
+ http :8088/payments id="id" approveDate="approveDate" amount="amount" status="status" qty="qty" reservId="reservId" payId="payId" 
 ```
 - review
 ```
