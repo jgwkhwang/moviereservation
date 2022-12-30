@@ -237,6 +237,8 @@ python policy-handler.py
 ```
 #payment/src/main/java/moviereservation/infra/PolicyHandler.java
 
+...
+
 @Service
 @Transactional
 public class PolicyHandler{
@@ -259,6 +261,8 @@ public class PolicyHandler{
         }
 
     }
+...    
+    
 ```
 
 ## DDD 의 적용
