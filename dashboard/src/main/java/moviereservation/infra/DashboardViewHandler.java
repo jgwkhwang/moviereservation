@@ -18,33 +18,16 @@ public class DashboardViewHandler {
     private DashboardRepository dashboardRepository;
 
     @StreamListener(KafkaProcessor.INPUT)
-    public void whenPaymentApproved_then_CREATE_1 (@Payload PaymentApproved paymentApproved) {
+    public void whenReservationRegistered_then_CREATE_1 (@Payload ReservationRegistered reservationRegistered) {
         try {
 
-            if (!paymentApproved.validate()) return;
+            if (!reservationRegistered.validate()) return;
 
             // view 객체 생성
             Dashboard dashboard = new Dashboard();
             // view 객체에 이벤트의 Value 를 set 함
-            dashboard.setPaymentId(Long.valueOf(paymentApproved.getPaymentId()));
-            dashboard.setPaymentStatus(paymentApproved.getStatus());
-            // view 레파지 토리에 save
-            dashboardRepository.save(dashboard);
-
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-    @StreamListener(KafkaProcessor.INPUT)
-    public void when_then_CREATE_ (@Payload  ) {
-        try {
-
-            if (!.validate()) return;
-
-            // view 객체 생성
-            Dashboard dashboard = new Dashboard();
-            // view 객체에 이벤트의 Value 를 set 함
-            dashboard.set();
+            dashboard.setReservId(reservation.status);
+            dashboard.setReservStatus(reservation.status);
             // view 레파지 토리에 save
             dashboardRepository.save(dashboard);
 
