@@ -6,13 +6,13 @@ import java.util.*;
 
 
 @Data
-public class PaymentApproved extends AbstractEvent {
+public class ReservationRegistered extends AbstractEvent {
 
     private Long id;
-    private String approveDate;
-    private Integer amount;
+    private String userId;
+    private String scheduleId;
     private String status;
-    private String qty;
+    private String createDate;
+    private String updateDate;
     private String reservId;
-    private String payId;
 }

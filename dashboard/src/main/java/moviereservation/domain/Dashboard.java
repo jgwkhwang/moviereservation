@@ -20,8 +20,8 @@ public class Dashboard {
         private Long reservationCnt;
         private Long reservId;
         private String reservStatus;
-        private Long paymentId;
         private String paymentStatus;
+        private String payId;
 
 
 }

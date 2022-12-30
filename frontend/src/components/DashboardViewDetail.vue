@@ -28,10 +28,10 @@
                 <String label="ReservStatus" v-model="item.reservStatus" :editMode="editMode" @change="change" />
             </div>
             <div>
-                <Number label="PaymentId" v-model="item.paymentId" :editMode="editMode" @change="change" />
+                <String label="PaymentStatus" v-model="item.paymentStatus" :editMode="editMode" @change="change" />
             </div>
             <div>
-                <String label="PaymentStatus" v-model="item.paymentStatus" :editMode="editMode" @change="change" />
+                <String label="PayId" v-model="item.payId" :editMode="editMode" @change="change" />
             </div>
         </v-card-text>
     </v-card>
